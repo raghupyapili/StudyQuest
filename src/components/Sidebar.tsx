@@ -109,6 +109,9 @@ export function Sidebar({ currentView, setView, onLogout }: SidebarProps) {
                     <LogOut className="h-4 w-4" />
                     Logout
                 </button>
+                <div className="text-[10px] text-zinc-600 text-center uppercase tracking-widest font-bold pb-2 mt-2">
+                    StudyQuest v2.0.1 (Slayer Update)
+                </div>
             </div>
         </div>
     );
