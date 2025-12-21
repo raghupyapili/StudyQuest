@@ -18,7 +18,13 @@ export function SubjectView({ subject, completedIds, onToggleChapter, onSelectCh
             <div className="p-8 animate-in slide-in-from-right-10 duration-500">
                 <header className="mb-8 flex items-center justify-between">
                     <div>
-                        <h1 className={cn("text-3xl font-bold mb-2", subject.color)}>{subject.name}</h1>
+                        <h1 className={cn(
+                            "text-3xl font-bold mb-2",
+                            subject.color,
+                            subject.id === 'telugu' && "font-telugu"
+                        )}>
+                            {subject.name}
+                        </h1>
                         <p className="text-muted-foreground">{subject.chapters.length} Quests Available</p>
                     </div>
                     <div className="text-right">
@@ -63,7 +69,8 @@ export function SubjectView({ subject, completedIds, onToggleChapter, onSelectCh
                                     <div>
                                         <h3 className={cn(
                                             "font-medium transition-all duration-300",
-                                            isCompleted ? "text-muted-foreground line-through decoration-primary/50" : "text-foreground"
+                                            isCompleted ? "text-muted-foreground line-through decoration-primary/50" : "text-foreground",
+                                            subject.id === 'telugu' && "font-telugu"
                                         )}>
                                             {chapter.name}
                                         </h3>

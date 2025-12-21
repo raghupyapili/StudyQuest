@@ -505,121 +505,121 @@ export const syllabusData: Subject[] = [
     },
     {
         id: 'telugu',
-        name: 'Telugu',
+        name: 'తెలుగు (Telugu)',
         color: 'text-purple-500',
         icon: 'Feather',
         chapters: [
             {
                 id: 't1',
-                name: 'Matrubhumi (Prose)',
+                name: 'మాతృభూమి (Matrubhumi)',
                 isCompleted: false,
                 xpReward: 120,
-                subtopics: [{ id: 't1-1', name: 'Patham Uddesham' }, { id: 't1-2', name: 'Padajalam' }, { id: 't1-3', name: 'Prashnalu' }]
+                subtopics: [{ id: 't1-1', name: 'పాఠం ఉద్దేశం' }, { id: 't1-2', name: 'పదజాలం' }, { id: 't1-3', name: 'ప్రశ్నలు' }]
             },
             {
                 id: 't2',
-                name: 'Janapada Kalalu (Prose)',
+                name: 'జానపద కళలు (Janapada Kalalu)',
                 isCompleted: false,
                 xpReward: 110,
-                subtopics: [{ id: 't2-1', name: 'Patham Uddesham' }, { id: 't2-2', name: 'Padajalam' }, { id: 't2-3', name: 'Prashnalu' }]
+                subtopics: [{ id: 't2-1', name: 'పాఠం ఉద్దేశం' }, { id: 't2-2', name: 'పదజాలం' }, { id: 't2-3', name: 'ప్రశ్నలు' }]
             },
             {
                 id: 't3',
-                name: 'Dhanyudu (Prose)',
+                name: 'ధన్యుడు (Dhanyudu)',
                 isCompleted: false,
                 xpReward: 110,
-                subtopics: [{ id: 't3-1', name: 'Patham Uddesham' }, { id: 't3-2', name: 'Padajalam' }, { id: 't3-3', name: 'Prashnalu' }]
+                subtopics: [{ id: 't3-1', name: 'పాఠం ఉద్దేశం' }, { id: 't3-2', name: 'పదజాలం' }, { id: 't3-3', name: 'ప్రశ్నలు' }]
             },
             {
                 id: 't4',
-                name: 'Ma Prayatnam (Prose)',
+                name: 'మా ప్రయత్నం (Ma Prayatnam)',
                 isCompleted: false,
                 xpReward: 100,
-                subtopics: [{ id: 't4-1', name: 'Patham Uddesham' }, { id: 't4-2', name: 'Padajalam' }, { id: 't4-3', name: 'Prashnalu' }]
+                subtopics: [{ id: 't4-1', name: 'పాఠం ఉద్దేశం' }, { id: 't4-2', name: 'పదజాలం' }, { id: 't4-3', name: 'ప్రశ్నలు' }]
             },
             {
                 id: 't5',
-                name: 'Goranta Deepalu (Prose)',
+                name: 'గోరంత దీపాలు (Goranta Deepalu)',
                 isCompleted: false,
                 xpReward: 110,
-                subtopics: [{ id: 't5-1', name: 'Patham Uddesham' }, { id: 't5-2', name: 'Padajalam' }, { id: 't5-3', name: 'Prashnalu' }]
+                subtopics: [{ id: 't5-1', name: 'పాఠం ఉద్దేశం' }, { id: 't5-2', name: 'పదజాలం' }, { id: 't5-3', name: 'ప్రశ్నలు' }]
             },
             {
                 id: 't6',
-                name: 'Danashilam (Poetry)',
+                name: 'దానశీలం (Danashilam)',
                 isCompleted: false,
                 xpReward: 130,
-                subtopics: [{ id: 't6-1', name: 'Kavi Parichayam' }, { id: 't6-2', name: 'Padajalam' }, { id: 't6-3', name: 'Vyakaranam' }]
+                subtopics: [{ id: 't6-1', name: 'కవి పరిచయం' }, { id: 't6-2', name: 'పదజాలం' }, { id: 't6-3', name: 'వ్యాకరణం' }]
             },
             {
                 id: 't7',
-                name: 'Evari Bhasha Variki Vinasompu (Poetry)',
+                name: 'ఎవరి భాష వారికి వినసొంపు (Evari Bhasha)',
                 isCompleted: false,
                 xpReward: 120,
-                subtopics: [{ id: 't7-1', name: 'Kavi Parichayam' }, { id: 't7-2', name: 'Padajalam' }, { id: 't7-3', name: 'Vyakaranam' }]
+                subtopics: [{ id: 't7-1', name: 'కవి పరిచయం' }, { id: 't7-2', name: 'పదజాలం' }, { id: 't7-3', name: 'వ్యాకరణం' }]
             },
             {
                 id: 't8',
-                name: 'Manikya Veena (Poetry)',
+                name: 'మాణిక్య వీణ (Manikya Veena)',
                 isCompleted: false,
                 xpReward: 120,
-                subtopics: [{ id: 't8-1', name: 'Kavi Parichayam' }, { id: 't8-2', name: 'Padajalam' }, { id: 't8-3', name: 'Vyakaranam' }]
+                subtopics: [{ id: 't8-1', name: 'కవి పరిచయం' }, { id: 't8-2', name: 'పదజాలం' }, { id: 't8-3', name: 'వ్యాకరణం' }]
             },
             {
                 id: 't9',
-                name: 'Lakshya Siddhi (Poetry)',
+                name: 'లక్ష్య సిద్ధి (Lakshya Siddhi)',
                 isCompleted: false,
                 xpReward: 130,
-                subtopics: [{ id: 't9-1', name: 'Kavi Parichayam' }, { id: 't9-2', name: 'Padajalam' }, { id: 't9-3', name: 'Vyakaranam' }]
+                subtopics: [{ id: 't9-1', name: 'కవి పరిచయం' }, { id: 't9-2', name: 'పదజాలం' }, { id: 't9-3', name: 'వ్యాకరణం' }]
             },
             {
                 id: 't10',
-                name: 'Shataka Madhurima (Poetry)',
+                name: 'శతక మధురిమ (Shataka Madhurima)',
                 isCompleted: false,
                 xpReward: 140,
-                subtopics: [{ id: 't10-1', name: 'Kavi Parichayam' }, { id: 't10-2', name: 'Padajalam' }, { id: 't10-3', name: 'Vyakaranam' }]
+                subtopics: [{ id: 't10-1', name: 'కవి పరిచయం' }, { id: 't10-2', name: 'పదజాలం' }, { id: 't10-3', name: 'వ్యాకరణం' }]
             },
             {
                 id: 't11',
-                name: 'Ramayanam - Bala Kandam',
+                name: 'రామాయణం - బాల కాండం',
                 isCompleted: false,
                 xpReward: 150,
-                subtopics: [{ id: 't11-1', name: 'Story Summary' }, { id: 't11-2', name: 'Key Events' }, { id: 't11-3', name: 'Questions' }]
+                subtopics: [{ id: 't11-1', name: 'కథా సారాంశం' }, { id: 't11-2', name: 'ముఖ్య ఘట్టాలు' }, { id: 't11-3', name: 'ప్రశ్నలు' }]
             },
             {
                 id: 't12',
-                name: 'Ramayanam - Ayodhya Kandam',
+                name: 'రామాయణం - అయోధ్య కాండం',
                 isCompleted: false,
                 xpReward: 150,
-                subtopics: [{ id: 't12-1', name: 'Story Summary' }, { id: 't12-2', name: 'Key Events' }, { id: 't12-3', name: 'Questions' }]
+                subtopics: [{ id: 't12-1', name: 'కథా సారాంశం' }, { id: 't12-2', name: 'ముఖ్య ఘట్టాలు' }, { id: 't12-3', name: 'ప్రశ్నలు' }]
             },
             {
                 id: 't13',
-                name: 'Ramayanam - Aranya Kandam',
+                name: 'రామాయణం - అరణ్య కాండం',
                 isCompleted: false,
                 xpReward: 150,
-                subtopics: [{ id: 't13-1', name: 'Story Summary' }, { id: 't13-2', name: 'Key Events' }, { id: 't13-3', name: 'Questions' }]
+                subtopics: [{ id: 't13-1', name: 'కథా సారాంశం' }, { id: 't13-2', name: 'ముఖ్య ఘట్టాలు' }, { id: 't13-3', name: 'ప్రశ్నలు' }]
             },
             {
                 id: 't14',
-                name: 'Reading Comprehension',
+                name: 'పఠన అవగాహన (Reading Comprehension)',
                 isCompleted: false,
                 xpReward: 90,
-                subtopics: [{ id: 't14-1', name: 'Practice Passage 1' }, { id: 't14-2', name: 'Practice Passage 2' }]
+                subtopics: [{ id: 't14-1', name: 'అభ్యాస పత్రం 1' }, { id: 't14-2', name: 'అభ్యాస పత్రం 2' }]
             },
             {
                 id: 't15',
-                name: 'Essay Writing',
+                name: 'వ్యాస రచన (Essay Writing)',
                 isCompleted: false,
                 xpReward: 100,
-                subtopics: [{ id: 't15-1', name: 'General Topics' }, { id: 't15-2', name: 'Current Issues' }]
+                subtopics: [{ id: 't15-1', name: 'సాధారణ అంశాలు' }, { id: 't15-2', name: 'ప్రస్తుత అంశాలు' }]
             },
             {
                 id: 't16',
-                name: 'Telugu Grammar',
+                name: 'తెలుగు వ్యాకరణం (Telugu Grammar)',
                 isCompleted: false,
                 xpReward: 160,
-                subtopics: [{ id: 't16-1', name: 'Sandhulu' }, { id: 't16-2', name: 'Samasalu' }, { id: 't16-3', name: 'Alankaralu' }]
+                subtopics: [{ id: 't16-1', name: 'సంధులు' }, { id: 't16-2', name: 'సమాసాలు' }, { id: 't16-3', name: 'అలంకారాలు' }]
             },
         ]
     }

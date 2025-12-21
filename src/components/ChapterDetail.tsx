@@ -42,7 +42,10 @@ export function ChapterDetail({ chapter, onClose }: ChapterDetailProps) {
                 {/* Header */}
                 <div className="p-6 border-b border-zinc-800 bg-zinc-900/50 flex items-start justify-between">
                     <div>
-                        <h2 className="text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-zinc-400">
+                        <h2 className={cn(
+                            "text-2xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-white to-zinc-400",
+                            chapter.id.startsWith('t') && "font-telugu"
+                        )}>
                             {chapter.name}
                         </h2>
                         <p className="text-muted-foreground text-sm mt-1">
@@ -79,7 +82,11 @@ export function ChapterDetail({ chapter, onClose }: ChapterDetailProps) {
                                             )}
                                         >
                                             {isDone ? <CheckSquare className="w-4 h-4 text-primary shrink-0" /> : <Square className="w-4 h-4 shrink-0" />}
-                                            <span className={cn("text-sm", isDone && "line-through opacity-70")}>{sub.name}</span>
+                                            <span className={cn(
+                                                "text-sm",
+                                                isDone && "line-through opacity-70",
+                                                chapter.id.startsWith('t') && "font-telugu"
+                                            )}>{sub.name}</span>
                                         </button>
                                     )
                                 })}
