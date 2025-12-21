@@ -16,7 +16,7 @@ import type { Chapter } from './data/syllabus';
 function App() {
   const [currentView, setCurrentView] = useState('dashboard');
   const [selectedChapter, setSelectedChapter] = useState<Chapter | null>(null);
-  const { state, completeChapter, uncompleteChapter } = useGameState();
+  const { state, completeChapter, uncompleteChapter, completePracticePaper } = useGameState();
   const { isAuthenticated, user, login, logout } = useAuth();
 
   const handleToggleChapter = (id: string, reward: number) => {
@@ -81,7 +81,10 @@ function App() {
     }
 
     if (currentView === 'practice') {
-      return <PracticePapers />;
+      return <PracticePapers
+        completedIds={state.completedPracticePaperIds}
+        onComplete={completePracticePaper}
+      />;
     }
 
     const subject = syllabusData.find(s => s.id === currentView);

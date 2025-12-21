@@ -38,11 +38,16 @@ export function ParentDashboard({
 
         sub.chapters.forEach(ch => {
             if (ch.subtopics && ch.subtopics.length > 0) {
-                const cw = ch.subtopics.filter(st => completedSubTopicIds.includes(st.id)).length;
-                totalWeight += ch.subtopics.length;
-                completedWeight += cw;
-                subTotalWeight += ch.subtopics.length;
-                subCompletedWeight += cw;
+                const totalSub = ch.subtopics.length;
+                const completedSub = ch.subtopics.filter(st => completedSubTopicIds.includes(st.id)).length;
+
+                // Consistency check: if chapter is marked complete, all subtopics should count
+                const effectiveCompletedSub = completedChapterIds.includes(ch.id) ? totalSub : completedSub;
+
+                totalWeight += totalSub;
+                completedWeight += effectiveCompletedSub;
+                subTotalWeight += totalSub;
+                subCompletedWeight += effectiveCompletedSub;
             } else {
                 totalWeight += 1;
                 subTotalWeight += 1;

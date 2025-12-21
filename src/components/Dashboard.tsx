@@ -11,6 +11,7 @@ interface DashboardProps {
         level: number;
         completedChapterIds: string[];
         completedSubTopicIds: string[];
+        completedPracticePaperIds: string[];
         streak: number;
     };
 }
@@ -39,10 +40,13 @@ export function Dashboard({ state }: DashboardProps) {
                     const chTotalSub = ch.subtopics.length;
                     const chCompletedSub = ch.subtopics.filter(st => state.completedSubTopicIds.includes(st.id)).length;
 
+                    // Support cases where chapter is manually marked complete but subtopics aren't perfectly synced
+                    const effectiveCompletedSub = state.completedChapterIds.includes(ch.id) ? chTotalSub : chCompletedSub;
+
                     totalWeight += chTotalSub;
-                    completedWeight += chCompletedSub;
+                    completedWeight += effectiveCompletedSub;
                     subTotalWeight += chTotalSub;
-                    subCompletedWeight += chCompletedSub;
+                    subCompletedWeight += effectiveCompletedSub;
                 } else {
                     totalWeight += 1;
                     subTotalWeight += 1;
@@ -66,6 +70,17 @@ export function Dashboard({ state }: DashboardProps) {
 
     const xpProgress = (state.xp % 500) / 500 * 100;
     const currentSlayerRank = getRank(stats.percentage);
+
+    // Randomize recommended training for variety
+    const recommendedQuests = useMemo(() => {
+        const incomplete = syllabusData.flatMap(s => s.chapters.map(c => ({ ...c, subject: s })))
+            .filter(c => !state.completedChapterIds.includes(c.id));
+
+        // Shuffle and pick 3
+        return [...incomplete]
+            .sort(() => Math.random() - 0.5)
+            .slice(0, 3);
+    }, [state.completedChapterIds]);
 
     return (
         <div className="p-8 space-y-8 animate-in fade-in duration-500">
@@ -201,31 +216,28 @@ export function Dashboard({ state }: DashboardProps) {
                 </h2>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-                    {syllabusData.flatMap(s => s.chapters.map(c => ({ ...c, subject: s })))
-                        .filter(c => !state.completedChapterIds.includes(c.id))
-                        .slice(0, 3)
-                        .map((quest) => (
-                            <div key={quest.id} className="glass-card p-4 rounded-xl border border-zinc-800 hover:border-primary/50 transition-colors cursor-pointer group">
-                                <div className="flex justify-between items-start mb-3">
-                                    <span className={cn("text-[10px] font-bold px-2 py-1 rounded-md bg-zinc-800 uppercase tracking-wider", quest.subject.color)}>
-                                        {quest.subject.name}
-                                    </span>
-                                    <span className="text-[10px] text-yellow-500 flex items-center gap-1 bg-yellow-500/10 px-2 py-1 rounded-full font-bold">
-                                        +{quest.xpReward} XP <Star className="w-3 h-3 fill-yellow-500" />
-                                    </span>
-                                </div>
-                                <h3 className={cn(
-                                    "font-semibold mb-1 group-hover:text-primary transition-colors line-clamp-1 font-outfit",
-                                    quest.id.startsWith('t') && "font-telugu"
-                                )}>
-                                    {quest.name}
-                                </h3>
-                                <div className="flex items-center gap-2 text-[10px] text-muted-foreground">
-                                    <Sword className="w-3 h-3" />
-                                    Slayer Mission
-                                </div>
+                    {recommendedQuests.map((quest) => (
+                        <div key={quest.id} className="glass-card p-4 rounded-xl border border-zinc-800 hover:border-primary/50 transition-colors cursor-pointer group">
+                            <div className="flex justify-between items-start mb-3">
+                                <span className={cn("text-[10px] font-bold px-2 py-1 rounded-md bg-zinc-800 uppercase tracking-wider", quest.subject.color)}>
+                                    {quest.subject.name}
+                                </span>
+                                <span className="text-[10px] text-yellow-500 flex items-center gap-1 bg-yellow-500/10 px-2 py-1 rounded-full font-bold">
+                                    +{quest.xpReward} XP <Star className="w-3 h-3 fill-yellow-500" />
+                                </span>
                             </div>
-                        ))
+                            <h3 className={cn(
+                                "font-semibold mb-1 group-hover:text-primary transition-colors line-clamp-1 font-outfit",
+                                quest.id.startsWith('t') && "font-telugu"
+                            )}>
+                                {quest.name}
+                            </h3>
+                            <div className="flex items-center gap-2 text-[10px] text-muted-foreground">
+                                <Sword className="w-3 h-3" />
+                                Slayer Mission
+                            </div>
+                        </div>
+                    ))
                     }
                     {syllabusData.every(s => s.chapters.every(c => state.completedChapterIds.includes(c.id))) && (
                         <div className="col-span-3 text-center py-10 text-muted-foreground glass-card rounded-2xl">

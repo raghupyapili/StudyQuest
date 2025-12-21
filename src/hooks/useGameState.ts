@@ -8,15 +8,15 @@ interface GameState {
     level: number;
     completedChapterIds: string[];
     completedSubTopicIds: string[];
+    completedPracticePaperIds: string[]; // NEW
     streak: number;
     lastLoginDate: string;
     settings: Settings;
-    chapterPlans: Record<string, ChapterPlan>; // chapterId -> Plan
+    chapterPlans: Record<string, ChapterPlan>;
 }
 
-const STORAGE_KEY = 'study-quest-state-v2';
+const STORAGE_KEY = 'study-quest-state-v3'; // Bumped version for new schema
 
-// 2026-02-17
 const DEFAULT_EXAM_DATE = '2026-02-17T00:00:00.000Z';
 
 const INITIAL_STATE: GameState = {
@@ -24,6 +24,7 @@ const INITIAL_STATE: GameState = {
     level: 1,
     completedChapterIds: [],
     completedSubTopicIds: [],
+    completedPracticePaperIds: [],
     streak: 0,
     lastLoginDate: new Date().toISOString(),
     settings: {
@@ -37,14 +38,17 @@ export function useGameState() {
     const [state, setState] = useState<GameState>(() => {
         const stored = localStorage.getItem(STORAGE_KEY);
         if (stored) {
-            const parsed = JSON.parse(stored);
-            // Migration support: add new fields if missing
-            return {
-                ...INITIAL_STATE,
-                ...parsed,
-                settings: { ...INITIAL_STATE.settings, ...(parsed.settings || {}) },
-                chapterPlans: parsed.chapterPlans || {}
-            };
+            try {
+                const parsed = JSON.parse(stored);
+                return {
+                    ...INITIAL_STATE,
+                    ...parsed,
+                    settings: { ...INITIAL_STATE.settings, ...(parsed.settings || {}) },
+                    chapterPlans: parsed.chapterPlans || {}
+                };
+            } catch (e) {
+                return INITIAL_STATE;
+            }
         }
         return INITIAL_STATE;
     });
@@ -54,19 +58,25 @@ export function useGameState() {
     }, [state]);
 
     useEffect(() => {
-        const lastLogin = new Date(state.lastLoginDate);
+        const lastLoginStr = state.lastLoginDate;
+        if (!lastLoginStr) return;
+
+        const lastLogin = new Date(lastLoginStr);
         const today = new Date();
         const lastDate = new Date(lastLogin.getFullYear(), lastLogin.getMonth(), lastLogin.getDate());
         const currDate = new Date(today.getFullYear(), today.getMonth(), today.getDate());
 
-        const diffTime = Math.abs(currDate.getTime() - lastDate.getTime());
-        const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+        const diffTime = currDate.getTime() - lastDate.getTime();
+        const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24));
 
         if (diffDays === 1) {
             setState(prev => ({ ...prev, streak: prev.streak + 1, lastLoginDate: today.toISOString() }));
         } else if (diffDays > 1) {
             setState(prev => ({ ...prev, streak: 1, lastLoginDate: today.toISOString() }));
+        } else if (diffDays === 0) {
+            // Already logged in today
         } else {
+            // Clock skew?
             setState(prev => ({ ...prev, lastLoginDate: today.toISOString() }));
         }
     }, []);
@@ -96,16 +106,28 @@ export function useGameState() {
     const completeChapter = (chapterId: string, xpReward: number) => {
         if (state.completedChapterIds.includes(chapterId)) return;
 
+        // Find subtopics for this chapter to mark them as complete too
+        let subTopicIds: string[] = [];
+        for (const subject of syllabusData) {
+            const chapter = subject.chapters.find(c => c.id === chapterId);
+            if (chapter && chapter.subtopics) {
+                subTopicIds = chapter.subtopics.map(st => st.id);
+                break;
+            }
+        }
+
         setState(prev => {
+            const newCompletedSubTopicIds = Array.from(new Set([...prev.completedSubTopicIds, ...subTopicIds]));
             const newXp = prev.xp + xpReward;
             const newLevel = calculateLevel(newXp);
             const levelUp = newLevel > prev.level;
 
-            triggerConfetti(levelUp);
+            triggerConfetti(levelUp || true); // Always major for chapter completion
 
             return {
                 ...prev,
                 completedChapterIds: [...prev.completedChapterIds, chapterId],
+                completedSubTopicIds: newCompletedSubTopicIds,
                 xp: newXp,
                 level: newLevel
             };
@@ -114,11 +136,25 @@ export function useGameState() {
 
     const uncompleteChapter = (chapterId: string, xpReward: number) => {
         if (!state.completedChapterIds.includes(chapterId)) return;
+
+        // Find subtopics to remove them as well
+        let subTopicIds: string[] = [];
+        for (const subject of syllabusData) {
+            const chapter = subject.chapters.find(c => c.id === chapterId);
+            if (chapter && chapter.subtopics) {
+                subTopicIds = chapter.subtopics.map(st => st.id);
+                break;
+            }
+        }
+
         setState(prev => {
             const newXp = Math.max(0, prev.xp - xpReward);
+            const newCompletedSubTopicIds = prev.completedSubTopicIds.filter(id => !subTopicIds.includes(id));
+
             return {
                 ...prev,
                 completedChapterIds: prev.completedChapterIds.filter(id => id !== chapterId),
+                completedSubTopicIds: newCompletedSubTopicIds,
                 xp: newXp,
                 level: calculateLevel(newXp)
             }
@@ -127,7 +163,7 @@ export function useGameState() {
 
     const toggleSubTopic = (subTopicId: string) => {
         const isCompleted = state.completedSubTopicIds.includes(subTopicId);
-        const xpValue = 20; // Fixed small XP for subtopics
+        const subTopicXp = 20;
 
         setState(prev => {
             let newIds = [...prev.completedSubTopicIds];
@@ -136,10 +172,10 @@ export function useGameState() {
 
             if (isCompleted) {
                 newIds = newIds.filter(id => id !== subTopicId);
-                newXp = Math.max(0, prev.xp - xpValue);
+                newXp = Math.max(0, prev.xp - subTopicXp);
             } else {
                 newIds.push(subTopicId);
-                newXp = prev.xp + xpValue;
+                newXp = prev.xp + subTopicXp;
                 triggerConfetti(false);
             }
 
@@ -155,7 +191,7 @@ export function useGameState() {
                 if (parentChapter) break;
             }
 
-            // Check completion status of parent chapter
+            // Sync with parent chapter
             if (parentChapter && parentChapter.subtopics) {
                 const allSubtopicsCompleted = parentChapter.subtopics.every(st =>
                     newIds.includes(st.id)
@@ -184,6 +220,24 @@ export function useGameState() {
             }
         });
     };
+
+    const completePracticePaper = (paperId: string) => {
+        if (state.completedPracticePaperIds.includes(paperId)) return;
+        const reward = 200; // Bonus XP for practice papers
+
+        setState(prev => {
+            const newXp = prev.xp + reward;
+            const newLevel = calculateLevel(newXp);
+            triggerConfetti(newLevel > prev.level);
+
+            return {
+                ...prev,
+                completedPracticePaperIds: [...prev.completedPracticePaperIds, paperId],
+                xp: newXp,
+                level: newLevel
+            }
+        });
+    }
 
     const updateSettings = (newSettings: Partial<Settings>) => {
         setState(prev => ({
@@ -267,6 +321,7 @@ export function useGameState() {
         uncompleteChapter,
         getNextLevelXp,
         toggleSubTopic,
+        completePracticePaper,
         updateSettings,
         updateChapterPlan,
         addPlanTask,
