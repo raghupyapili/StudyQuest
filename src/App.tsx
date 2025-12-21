@@ -12,6 +12,7 @@ import { useGameState } from './hooks/useGameState';
 import { useAuth } from './hooks/useAuth';
 import { syllabusData } from './data/syllabus';
 import type { Chapter } from './data/syllabus';
+import { differenceInDays } from 'date-fns';
 
 function App() {
   const [currentView, setCurrentView] = useState('dashboard');
@@ -115,20 +116,34 @@ function App() {
 
         <div className="max-w-7xl mx-auto min-h-full relative z-10">
           {/* Elite Slayer Header */}
-          <div className="relative h-40 w-full overflow-hidden mb-2 rounded-b-[2rem] border-b border-primary/20 shadow-2xl">
+          <div className="relative h-48 w-full overflow-hidden mb-2 rounded-b-[2rem] border-b border-primary/20 shadow-2xl">
             <div
               className="absolute inset-0 bg-no-repeat bg-cover bg-center"
               style={{ backgroundImage: 'url("/slayer-bg.png")' }}
             ></div>
-            <div className="absolute inset-0 bg-gradient-to-t from-background via-background/20 to-transparent"></div>
-            <div className="absolute bottom-6 left-8">
-              <div className="flex items-center gap-2 mb-1">
-                <span className="px-2 py-0.5 bg-primary text-white text-[10px] font-bold uppercase tracking-[0.2em] rounded">
-                  Corps Training Grounds
-                </span>
-                <span className="text-[10px] text-zinc-300 font-bold uppercase tracking-widest bg-black/40 px-2 py-0.5 rounded backdrop-blur-sm">Wisteria Forest Area</span>
+            <div className="absolute inset-0 bg-gradient-to-t from-background via-background/10 to-transparent"></div>
+
+            {/* Top Badges */}
+            <div className="absolute top-6 left-8 flex items-center gap-3">
+              <span className="px-3 py-1 bg-primary text-white text-[11px] font-black uppercase tracking-[0.2em] rounded-md shadow-lg">
+                Elite Training Unit
+              </span>
+              <span className="text-[10px] text-zinc-300 font-bold uppercase tracking-widest bg-black/60 px-3 py-1 rounded-md backdrop-blur-md border border-white/5">
+                Wisteria Sector
+              </span>
+            </div>
+
+            {/* Countdown Overlay */}
+            <div className="absolute inset-0 flex flex-col items-center justify-center">
+              <div className="text-[11px] font-black text-primary uppercase tracking-[0.5em] mb-2 drop-shadow-sm">
+                Distance to Final Selection
               </div>
-              <h2 className="text-3xl font-bold font-outfit text-white drop-shadow-lg">Elite Slayer Dashboard</h2>
+              <div className="flex items-baseline gap-2">
+                <span className="text-7xl font-black font-outfit text-white drop-shadow-[0_4px_12px_rgba(0,0,0,0.8)] leading-none italic">
+                  {differenceInDays(new Date(state.settings.examDate), new Date())}
+                </span>
+                <span className="text-2xl font-black font-outfit text-primary drop-shadow-[0_2px_8px_rgba(0,0,0,0.8)] uppercase">Days</span>
+              </div>
             </div>
           </div>
 
