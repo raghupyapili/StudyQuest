@@ -111,15 +111,30 @@ function App() {
 
       {/* Main Content Area */}
       <main className="flex-1 overflow-y-auto relative">
-        {/* Subtle Background Layer */}
-        <div
-          className="absolute inset-0 pointer-events-none opacity-[0.07] mix-blend-overlay bg-no-repeat bg-cover bg-center"
-          style={{ backgroundImage: 'url("/assets/images/slayer-bg.png")' }}
-        ></div>
         <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 pointer-events-none mix-blend-overlay"></div>
 
         <div className="max-w-7xl mx-auto min-h-full relative z-10">
-          {renderContent()}
+          {/* Elite Slayer Header */}
+          <div className="relative h-40 w-full overflow-hidden mb-2 rounded-b-[2rem] border-b border-primary/20 shadow-2xl">
+            <div
+              className="absolute inset-0 bg-no-repeat bg-cover bg-center"
+              style={{ backgroundImage: 'url("/slayer-bg.png")' }}
+            ></div>
+            <div className="absolute inset-0 bg-gradient-to-t from-background via-background/20 to-transparent"></div>
+            <div className="absolute bottom-6 left-8">
+              <div className="flex items-center gap-2 mb-1">
+                <span className="px-2 py-0.5 bg-primary text-white text-[10px] font-bold uppercase tracking-[0.2em] rounded">
+                  Corps Training Grounds
+                </span>
+                <span className="text-[10px] text-zinc-300 font-bold uppercase tracking-widest bg-black/40 px-2 py-0.5 rounded backdrop-blur-sm">Wisteria Forest Area</span>
+              </div>
+              <h2 className="text-3xl font-bold font-outfit text-white drop-shadow-lg">Elite Slayer Dashboard</h2>
+            </div>
+          </div>
+
+          <div className="px-4 pb-8">
+            {renderContent()}
+          </div>
         </div>
       </main>
 
