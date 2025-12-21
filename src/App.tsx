@@ -110,9 +110,15 @@ function App() {
       </div>
 
       {/* Main Content Area */}
-      <main className="flex-1 overflow-y-auto relative bg-gradient-to-br from-background to-background/50">
+      <main className="flex-1 overflow-y-auto relative">
+        {/* Subtle Background Layer */}
+        <div
+          className="absolute inset-0 pointer-events-none opacity-[0.07] mix-blend-overlay bg-no-repeat bg-cover bg-center"
+          style={{ backgroundImage: 'url("/assets/images/slayer-bg.png")' }}
+        ></div>
         <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 pointer-events-none mix-blend-overlay"></div>
-        <div className="max-w-7xl mx-auto min-h-full">
+
+        <div className="max-w-7xl mx-auto min-h-full relative z-10">
           {renderContent()}
         </div>
       </main>
