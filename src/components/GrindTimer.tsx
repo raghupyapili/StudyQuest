@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Play, Pause, RefreshCw } from 'lucide-react';
+import { Play, Pause, RefreshCw, Zap, Shield, Swords } from 'lucide-react';
 import { CircularProgressbarWithChildren, buildStyles } from 'react-circular-progressbar';
 import { cn } from '../lib/utils';
 import confetti from 'canvas-confetti';
@@ -18,12 +18,12 @@ export function GrindMode() {
             }, 1000);
         } else if (timeLeft === 0 && isActive) {
             setIsActive(false);
-            // Play sound or notify
             if (mode === 'focus') {
                 confetti({
-                    particleCount: 100,
-                    spread: 70,
-                    origin: { y: 0.6 }
+                    particleCount: 150,
+                    spread: 80,
+                    origin: { y: 0.6 },
+                    colors: ['#a855f7', '#ec4899', '#3b82f6']
                 });
             }
         }
@@ -52,64 +52,111 @@ export function GrindMode() {
     };
 
     return (
-        <div className="p-8 h-full flex flex-col items-center justify-center animate-in zoom-in-95 duration-500">
-            <div className="text-center mb-8">
-                <h1 className="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-purple-400 mb-2">
+        <div className="min-h-[80vh] flex flex-col items-center justify-center animate-in fade-in duration-700 p-8 relative overflow-hidden">
+            {/* Background Atmosphere */}
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[600px] h-[600px] bg-primary/5 blur-[120px] rounded-full pointer-events-none"></div>
+
+            <div className="text-center mb-12 relative z-10">
+                <div className="flex items-center justify-center gap-3 mb-4">
+                    <div className="h-0.5 w-12 bg-gradient-to-r from-transparent to-primary"></div>
+                    <span className="text-[10px] font-black uppercase tracking-[0.5em] text-primary drop-shadow-sm">Inner Focus</span>
+                    <div className="h-0.5 w-12 bg-gradient-to-l from-transparent to-primary"></div>
+                </div>
+                <h1 className="text-6xl font-black bg-clip-text text-transparent bg-gradient-to-b from-white to-white/40 mb-2 italic tracking-tighter uppercase">
                     Grind Mode
                 </h1>
-                <p className="text-muted-foreground">Focus on the task at hand. No distractions.</p>
+                <p className="text-zinc-500 font-bold uppercase tracking-widest text-xs">Total concentration. Constant progress.</p>
             </div>
 
-            <div className="w-80 h-80 mb-8 relative">
+            <div className="w-96 h-96 mb-12 relative group">
+                {/* Outer Ring Decoration */}
+                <div className={cn(
+                    "absolute -inset-8 rounded-full border-2 border-dashed border-white/5 animate-spin-slow transition-opacity",
+                    isActive ? "opacity-100" : "opacity-0"
+                )}></div>
+
                 <CircularProgressbarWithChildren
                     value={percentage}
                     styles={buildStyles({
-                        pathColor: mode === 'focus' ? '#7c3aed' : '#10b981',
-                        trailColor: '#18181b', // zinc-900
-                        strokeLinecap: 'round',
+                        pathColor: mode === 'focus' ? '#a855f7' : '#10b981',
+                        trailColor: 'rgba(255,255,255,0.03)',
+                        strokeLinecap: 'butt',
+                        pathTransitionDuration: 1,
                     })}
                 >
-                    <div className="text-center">
-                        <div className="text-6xl font-mono font-bold tracking-tighter">
+                    <div className="text-center relative z-10">
+                        <div className="text-8xl font-black font-outfit tracking-tighter italic text-white drop-shadow-[0_0_20px_rgba(168,85,247,0.3)]">
                             {formatTime(timeLeft)}
                         </div>
-                        <div className="text-sm uppercase tracking-widest text-muted-foreground mt-2 font-medium">
-                            {isActive ? 'Grinding...' : 'Ready'}
+                        <div className="flex flex-col items-center mt-4">
+                            <span className={cn(
+                                "text-[10px] font-black uppercase tracking-[0.3em] transition-all",
+                                isActive ? "text-primary animate-pulse" : "text-zinc-600"
+                            )}>
+                                {isActive ? 'Protocol Active' : 'Standby Mode'}
+                            </span>
+                            <div className="mt-2 flex gap-1">
+                                {[1, 2, 3].map(i => (
+                                    <div key={i} className={cn("h-1 w-4 rounded-full", isActive ? "bg-primary" : "bg-zinc-800")}></div>
+                                ))}
+                            </div>
                         </div>
                     </div>
                 </CircularProgressbarWithChildren>
             </div>
 
-            <div className="flex items-center gap-4 mb-8">
-                <button
-                    onClick={toggleTimer}
-                    className="w-16 h-16 rounded-full bg-primary flex items-center justify-center hover:bg-primary/90 transition-all shadow-[0_0_20px_rgba(124,58,237,0.5)]"
-                >
-                    {isActive ? <Pause className="fill-white text-white" /> : <Play className="fill-white text-white ml-1" />}
-                </button>
+            <div className="flex items-center gap-8 mb-12 relative z-10">
                 <button
                     onClick={resetTimer}
-                    className="w-12 h-12 rounded-full bg-zinc-800 flex items-center justify-center hover:bg-zinc-700 transition-colors"
+                    className="h-14 w-14 rounded-2xl bg-zinc-900 border border-white/5 flex items-center justify-center hover:bg-zinc-800 transition-all group active:scale-95"
+                    title="Reset Focus"
                 >
-                    <RefreshCw className="w-5 h-5" />
+                    <RefreshCw className="w-6 h-6 text-zinc-500 group-hover:text-white transition-colors" />
                 </button>
+
+                <button
+                    onClick={toggleTimer}
+                    className={cn(
+                        "w-24 h-24 rounded-[2.5rem] flex items-center justify-center transition-all shadow-2xl active:scale-90 group relative overflow-hidden",
+                        isActive
+                            ? "bg-zinc-900 border-2 border-primary/50 text-primary shadow-primary/20"
+                            : "bg-primary text-white shadow-primary/40 hover:scale-105"
+                    )}
+                >
+                    {isActive ? <Pause className="w-8 h-8 fill-primary" /> : <Play className="w-8 h-8 fill-white ml-1" />}
+                </button>
+
+                <div className="flex flex-col gap-3">
+                    <div className="h-14 w-14 rounded-2xl bg-zinc-900 border border-white/5 flex items-center justify-center opacity-40 cursor-not-allowed">
+                        <Shield className="w-6 h-6 text-zinc-500" />
+                    </div>
+                </div>
             </div>
 
-            <div className="flex gap-2">
+            <div className="flex gap-3 bg-zinc-900/50 p-2 rounded-[2rem] border border-white/5 backdrop-blur-xl relative z-10">
                 {[15, 25, 45, 60].map(m => (
                     <button
                         key={m}
                         onClick={() => setTime(m)}
                         className={cn(
-                            "px-4 py-2 rounded-lg text-sm font-medium transition-colors border",
+                            "px-6 py-3 rounded-[1.5rem] text-xs font-black uppercase tracking-widest transition-all",
                             minutes === m
-                                ? "bg-primary/10 border-primary text-primary"
-                                : "bg-zinc-900 border-zinc-800 hover:bg-zinc-800 text-muted-foreground"
+                                ? "bg-primary text-white shadow-lg shadow-primary/20"
+                                : "text-zinc-500 hover:text-zinc-300 hover:bg-white/5"
                         )}
                     >
                         {m}m
                     </button>
                 ))}
+            </div>
+
+            {/* Visual Accents */}
+            <div className="absolute bottom-10 left-10 flex gap-4 opacity-10 pointer-events-none">
+                <Zap className="w-12 h-12" />
+                <Swords className="w-12 h-12" />
+            </div>
+            <div className="absolute top-10 right-10 flex gap-4 opacity-10 pointer-events-none">
+                <Shield className="w-12 h-12" />
             </div>
         </div>
     );

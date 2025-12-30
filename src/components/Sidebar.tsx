@@ -7,6 +7,7 @@ interface SidebarProps {
     currentView: string;
     setView: (view: string) => void;
     onLogout: () => void;
+    grade: string;
 }
 
 const iconMap: Record<string, React.ElementType> = {
@@ -17,100 +18,107 @@ const iconMap: Record<string, React.ElementType> = {
     Feather
 };
 
-export function Sidebar({ currentView, setView, onLogout }: SidebarProps) {
+export function Sidebar({ currentView, setView, onLogout, grade }: SidebarProps) {
+    const currentSyllabus = syllabusData[grade] || syllabusData['10'];
+
     return (
-        <div className="w-64 border-r border-border h-full bg-card/50 backdrop-blur-xl flex flex-col p-4">
-            <div className="mb-8 flex items-center gap-2 px-2">
-                <div className="h-8 w-8 bg-primary rounded-lg flex items-center justify-center">
-                    <BookOpen className="text-white h-5 w-5" />
+        <div className="w-64 border-r border-white/5 h-full bg-[#0d0d0d] flex flex-col p-4 shadow-2xl">
+            <div className="mb-8 flex items-center justify-between px-2">
+                <div className="flex items-center gap-2">
+                    <div className="h-8 w-8 bg-primary rounded-lg flex items-center justify-center shadow-lg shadow-primary/20">
+                        <BookOpen className="text-white h-5 w-5" />
+                    </div>
+                    <h1 className="text-xl font-black bg-clip-text text-transparent bg-gradient-to-r from-white to-white/60 uppercase tracking-tighter">
+                        StudyQuest
+                    </h1>
                 </div>
-                <h1 className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary to-purple-400">
-                    StudyQuest
-                </h1>
             </div>
 
-            <div className="space-y-2 flex-1">
+            <div className="space-y-1.5 flex-1 overflow-y-auto no-scrollbar">
                 <button
                     onClick={() => setView('dashboard')}
                     className={cn(
-                        "w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200",
+                        "w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group",
                         currentView === 'dashboard'
-                            ? "bg-primary/10 text-primary font-medium"
-                            : "text-muted-foreground hover:bg-white/5 hover:text-foreground"
+                            ? "bg-primary text-white font-bold shadow-lg shadow-primary/20"
+                            : "text-zinc-500 hover:bg-white/5 hover:text-white"
                     )}
                 >
-                    <LayoutDashboard className="h-5 w-5" />
+                    <LayoutDashboard className={cn("h-5 w-5 transition-transform group-hover:scale-110", currentView === 'dashboard' ? "text-white" : "text-zinc-500")} />
                     Dashboard
                 </button>
 
                 <button
                     onClick={() => setView('grind')}
                     className={cn(
-                        "w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200",
+                        "w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group",
                         currentView === 'grind'
-                            ? "bg-primary/10 text-primary font-medium"
-                            : "text-muted-foreground hover:bg-white/5 hover:text-foreground"
+                            ? "bg-primary text-white font-bold shadow-lg shadow-primary/20"
+                            : "text-zinc-500 hover:bg-white/5 hover:text-white"
                     )}
                 >
-                    <Timer className="h-5 w-5" />
+                    <Timer className={cn("h-5 w-5 transition-transform group-hover:scale-110", currentView === 'grind' ? "text-white" : "text-zinc-500")} />
                     Grind Mode
                 </button>
 
-                <button
-                    onClick={() => setView('practice')}
-                    className={cn(
-                        "w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200",
-                        currentView === 'practice'
-                            ? "bg-primary/10 text-primary font-medium"
-                            : "text-muted-foreground hover:bg-white/5 hover:text-foreground"
-                    )}
-                >
-                    <FileText className="h-5 w-5" />
-                    Practice Papers
-                </button>
+                {grade === '10' && (
+                    <button
+                        onClick={() => setView('practice')}
+                        className={cn(
+                            "w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group",
+                            currentView === 'practice'
+                                ? "bg-primary text-white font-bold shadow-lg shadow-primary/20"
+                                : "text-zinc-500 hover:bg-white/5 hover:text-white"
+                        )}
+                    >
+                        <FileText className={cn("h-5 w-5 transition-transform group-hover:scale-110", currentView === 'practice' ? "text-white" : "text-zinc-500")} />
+                        Practice Papers
+                    </button>
+                )}
 
-                <div className="pt-4 pb-2 px-4 text-xs font-medium text-muted-foreground uppercase tracking-wider">
+                <div className="pt-6 pb-2 px-4 text-[10px] font-black text-zinc-600 uppercase tracking-[0.2em]">
                     Syllabus
                 </div>
 
-                {syllabusData.map((subject) => {
+                {currentSyllabus.map((subject) => {
                     const Icon = iconMap[subject.icon] || BookOpen;
                     return (
                         <button
                             key={subject.id}
                             onClick={() => setView(subject.id)}
                             className={cn(
-                                "w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200",
+                                "w-full flex items-center gap-3 px-4 py-3 rounded-xl transition-all duration-200 group border border-transparent",
                                 currentView === subject.id
-                                    ? "bg-white/5 text-foreground font-medium shadow-[0_0_15px_rgba(0,0,0,0.2)] border border-white/5"
-                                    : "text-muted-foreground hover:bg-white/5 hover:text-foreground",
-                                subject.id === 'telugu' && "font-telugu"
+                                    ? "bg-zinc-800 text-white font-bold border-white/10"
+                                    : "text-zinc-500 hover:bg-white/5 hover:text-white focus:bg-white/5"
                             )}
                         >
-                            <Icon className={cn("h-5 w-5", subject.color)} />
+                            <Icon className={cn("h-5 w-5 transition-transform group-hover:scale-110", currentView === subject.id ? subject.color : "text-zinc-500")} />
                             {subject.name}
                         </button>
                     );
                 })}
             </div>
 
-            <div className="space-y-3">
-                <div className="p-4 bg-gradient-to-br from-primary/20 to-purple-500/10 rounded-2xl border border-primary/20">
-                    <h3 className="text-sm font-semibold text-primary mb-1">Daily Tip</h3>
-                    <p className="text-xs text-muted-foreground">
-                        Consistency is key. Even 30 mins a day adds up!
+            <div className="mt-auto pt-6 space-y-4">
+                <div className="p-4 bg-gradient-to-br from-zinc-800/50 to-zinc-900/50 rounded-2xl border border-white/5 relative overflow-hidden group">
+                    <div className="absolute top-0 right-0 w-16 h-16 bg-primary/10 blur-2xl rounded-full -mr-8 -mt-8 group-hover:bg-primary/20 transition-colors"></div>
+                    <h3 className="text-[10px] font-black text-primary uppercase tracking-[0.2em] mb-1">Knowledge Drop</h3>
+                    <p className="text-[11px] text-zinc-400 font-medium leading-relaxed">
+                        Consistency beats intensity. Set your pace, win the race.
                     </p>
                 </div>
 
                 <button
                     onClick={onLogout}
-                    className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-zinc-800/50 hover:bg-zinc-800 rounded-xl transition-colors text-sm text-muted-foreground hover:text-foreground"
+                    className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-zinc-900 hover:bg-red-500/10 hover:text-red-500 rounded-xl transition-all text-xs font-bold text-zinc-500 border border-white/5"
                 >
                     <LogOut className="h-4 w-4" />
-                    Logout
+                    Secure Logout
                 </button>
-                <div className="text-[10px] text-zinc-600 text-center uppercase tracking-widest font-bold pb-2 mt-2">
-                    StudyQuest v2.0.3 (Timer Update)
+
+                <div className="text-[9px] text-zinc-700 text-center uppercase tracking-[0.25em] font-black pb-2">
+                    StudyQuest v3.0.0 Stable
                 </div>
             </div>
         </div>

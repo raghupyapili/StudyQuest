@@ -1,13 +1,8 @@
 import { useState, useEffect } from 'react';
-import type { AuthState } from '../types';
+import type { AuthState, User, StudyNotification } from '../types';
 
-const AUTH_STORAGE_KEY = 'study-quest-auth';
-
-// Simple credentials - in production, use proper authentication
-const CREDENTIALS = {
-    student: { password: 'study2025', name: 'Student' },
-    parent: { password: 'parent2025', name: 'Parent' }
-};
+const AUTH_STORAGE_KEY = 'study-quest-auth-v2';
+const USERS_STORAGE_KEY = 'study-quest-users';
 
 export function useAuth() {
     const [authState, setAuthState] = useState<AuthState>(() => {
@@ -22,20 +17,124 @@ export function useAuth() {
         return { isAuthenticated: false, user: null };
     });
 
+    const [users, setUsers] = useState<User[]>(() => {
+        const stored = localStorage.getItem(USERS_STORAGE_KEY);
+        // Remove default users for a clean slate, or migrate them if they exist
+        return stored ? JSON.parse(stored) : [];
+    });
+
     useEffect(() => {
         localStorage.setItem(AUTH_STORAGE_KEY, JSON.stringify(authState));
     }, [authState]);
 
-    const login = (role: 'student' | 'parent', password: string): boolean => {
-        const credential = CREDENTIALS[role];
-        if (credential.password === password) {
-            setAuthState({
-                isAuthenticated: true,
-                user: { role, name: credential.name }
-            });
+    useEffect(() => {
+        localStorage.setItem(USERS_STORAGE_KEY, JSON.stringify(users));
+    }, [users]);
+
+    const login = (username: string, password: string): boolean => {
+        const user = users.find(u => u.username === username && u.password === password);
+        if (user) {
+            setAuthState({ isAuthenticated: true, user });
             return true;
         }
         return false;
+    };
+
+    const signup = (userData: Omit<User, 'id'>) => {
+        // Prevent duplicate usernames
+        if (users.some(u => u.username === userData.username)) {
+            throw new Error('Username already exists');
+        }
+
+        const newUser: User = {
+            ...userData,
+            id: crypto.randomUUID(),
+            avatar: userData.avatar || (userData.role === 'student' ? '👨‍🎓' : '🧙‍♂️'),
+            childIds: userData.role === 'parent' ? [] : undefined
+        };
+        const updatedUsers = [...users, newUser];
+        setUsers(updatedUsers);
+        setAuthState({ isAuthenticated: true, user: newUser });
+        return newUser;
+    };
+
+    const createChild = (parentId: string, childData: Omit<User, 'id' | 'role' | 'parentId' | 'childIds'>) => {
+        const childId = crypto.randomUUID();
+        const newChild: User = {
+            ...childData,
+            id: childId,
+            role: 'student',
+            parentId: parentId,
+            avatar: '👨‍🎓'
+        };
+
+        setUsers(prev => {
+            const updated = [...prev, newChild].map(u => {
+                if (u.id === parentId) {
+                    const existingChildren = u.childIds || [];
+                    return { ...u, childIds: Array.from(new Set([...existingChildren, childId])) };
+                }
+                return u;
+            });
+            return updated;
+        });
+
+        // Sync auth state if current user is the parent
+        if (authState.user?.id === parentId) {
+            setAuthState(prev => {
+                if (!prev.user) return prev;
+                return {
+                    ...prev,
+                    user: {
+                        ...prev.user,
+                        childIds: Array.from(new Set([...(prev.user.childIds || []), childId]))
+                    }
+                };
+            });
+        }
+    };
+
+    const addNotification = (userId: string, notification: Omit<StudyNotification, 'id' | 'timestamp' | 'isRead'>) => {
+        const newNotif: StudyNotification = {
+            ...notification,
+            id: crypto.randomUUID(),
+            timestamp: new Date().toISOString(),
+            isRead: false
+        };
+
+        setUsers(prev => prev.map(u => {
+            if (u.id === userId) {
+                return { ...u, notifications: [newNotif, ...(u.notifications || [])] };
+            }
+            return u;
+        }));
+    };
+
+    const markNotificationRead = (userId: string, notifId: string) => {
+        setUsers(prev => prev.map(u => {
+            if (u.id === userId) {
+                const updatedNotifs = u.notifications?.map(n => n.id === notifId ? { ...n, isRead: true } : n);
+                return { ...u, notifications: updatedNotifs };
+            }
+            return u;
+        }));
+
+        if (authState.user?.id === userId) {
+            setAuthState(prev => ({
+                ...prev,
+                user: {
+                    ...prev.user!,
+                    notifications: prev.user!.notifications?.map(n => n.id === notifId ? { ...n, isRead: true } : n)
+                }
+            }));
+        }
+    };
+
+    const updateUserSettings = (userId: string, settings: Partial<User>) => {
+        setUsers(prev => prev.map(u => u.id === userId ? { ...u, ...settings } : u));
+        if (authState.user?.id === userId) {
+            setAuthState(prev => ({ ...prev, user: { ...prev.user!, ...settings } }));
+        }
     };
 
     const logout = () => {
@@ -44,7 +143,13 @@ export function useAuth() {
 
     return {
         ...authState,
+        users,
         login,
+        signup,
+        createChild,
+        addNotification,
+        markNotificationRead,
+        updateUserSettings,
         logout
     };
 }
