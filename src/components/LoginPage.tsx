@@ -300,6 +300,17 @@ export function LoginPage({ onLogin, onSignup, onCreateChild }: LoginPageProps) 
                                         placeholder="••••••••"
                                     />
                                 </div>
+                                {mode === 'login' && (
+                                    <div className="flex justify-end mt-1 px-1">
+                                        <button
+                                            type="button"
+                                            onClick={() => setShowForgot(true)}
+                                            className="text-[9px] font-black text-primary/60 hover:text-primary uppercase tracking-[0.2em] transition-colors"
+                                        >
+                                            Forgot Access Key?
+                                        </button>
+                                    </div>
+                                )}
                             </div>
 
                             {mode === 'signup' && selectedRole === 'student' && (
