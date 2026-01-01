@@ -8,10 +8,11 @@ interface SettingsModalProps {
     children?: User[];
     onClose: () => void;
     onUpdateSettings: (settings: Partial<User>) => void;
+    onUpdateChildSettings: (childId: string, settings: Partial<User>) => void;
     onCreateChild: (parentId: string, childData: any) => void;
 }
 
-export function SettingsModal({ user, children = [], onClose, onUpdateSettings, onCreateChild }: SettingsModalProps) {
+export function SettingsModal({ user, children = [], onClose, onUpdateSettings, onUpdateChildSettings, onCreateChild }: SettingsModalProps) {
     const [newChild, setNewChild] = useState({
         name: '',
         username: '',
@@ -157,18 +158,28 @@ export function SettingsModal({ user, children = [], onClose, onUpdateSettings, 
 
                         <div className="grid gap-3">
                             {children.map(child => (
-                                <div key={child.id} className="flex items-center justify-between p-4 bg-zinc-900/40 rounded-2xl border border-white/5">
-                                    <div className="flex items-center gap-4">
-                                        <div className="p-2.5 bg-zinc-800 rounded-xl text-lg">
-                                            <GraduationCap className="w-5 h-5 text-zinc-400" />
+                                <div key={child.id} className="space-y-2">
+                                    <div className="flex items-center justify-between p-4 bg-zinc-900/40 rounded-2xl border border-white/5">
+                                        <div className="flex items-center gap-4">
+                                            <div className="p-2.5 bg-zinc-800 rounded-xl text-lg">
+                                                <GraduationCap className="w-5 h-5 text-zinc-400" />
+                                            </div>
+                                            <div>
+                                                <div className="text-[11px] font-black text-white uppercase tracking-tight">{child.name}</div>
+                                                <div className="text-[9px] text-zinc-500 font-bold uppercase tracking-widest">Class {child.grade} • {child.username}</div>
+                                            </div>
                                         </div>
-                                        <div>
-                                            <div className="text-[11px] font-black text-white uppercase tracking-tight">{child.name}</div>
-                                            <div className="text-[9px] text-zinc-500 font-bold uppercase tracking-widest">Class {child.grade} • {child.username}</div>
-                                        </div>
-                                    </div>
-                                    <div className="px-3 py-1 bg-zinc-800 rounded-full text-[8px] font-black text-zinc-500 uppercase tracking-widest">
-                                        Active Duty
+                                        <button
+                                            onClick={() => {
+                                                const newPass = prompt(`Enter new Access Key for ${child.name}:`);
+                                                if (newPass) {
+                                                    onUpdateChildSettings(child.id, { password: newPass });
+                                                }
+                                            }}
+                                            className="px-3 py-1.5 bg-zinc-800 hover:bg-zinc-700 rounded-xl text-[8px] font-black text-zinc-400 hover:text-white uppercase tracking-widest transition-all"
+                                        >
+                                            Reset Access Key
+                                        </button>
                                     </div>
                                 </div>
                             ))}

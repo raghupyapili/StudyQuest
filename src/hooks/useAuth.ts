@@ -146,6 +146,26 @@ export function useAuth() {
         }
     };
 
+    const requestPasswordReset = (email: string): string | null => {
+        const user = users.find(u => u.email === email && u.role === 'parent');
+        if (user) {
+            // In a real app, this would send an email. For simulation, we return it.
+            const otp = Math.floor(1000 + Math.random() * 9000).toString();
+            console.log(`[SIMULATION] OTP for ${email}: ${otp}`);
+            return otp;
+        }
+        return null;
+    };
+
+    const resetPasswordByOTP = (email: string, newPassword: string) => {
+        setUsers(prev => prev.map(u => {
+            if (u.email === email && u.role === 'parent') {
+                return { ...u, password: newPassword };
+            }
+            return u;
+        }));
+    };
+
     const logout = () => {
         setAuthState({ isAuthenticated: false, user: null });
     };
@@ -159,6 +179,8 @@ export function useAuth() {
         addNotification,
         markNotificationRead,
         updateUserSettings,
+        requestPasswordReset,
+        resetPasswordByOTP,
         logout
     };
 }

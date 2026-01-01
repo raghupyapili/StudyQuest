@@ -18,7 +18,11 @@ import { differenceInDays, isAfter } from 'date-fns';
 import { cn } from './lib/utils';
 
 function App() {
-  const { isAuthenticated, user, login, logout, signup, users, createChild } = useAuth();
+  const {
+    isAuthenticated, user, login, logout, signup, users, createChild,
+    requestPasswordReset, resetPasswordByOTP, updateUserSettings,
+    addNotification, markNotificationRead
+  } = useAuth();
   const [selectedChildId, setSelectedChildId] = useState<string | null>(null);
 
   // Use the logged in user's ID for students, or selected child's ID for parents
@@ -41,7 +45,6 @@ function App() {
     secondLanguage: targetUser.secondLanguage
   } : undefined);
 
-  const { addNotification, markNotificationRead, updateUserSettings } = useAuth();
   const [showStudentNotice, setShowStudentNotice] = useState(false);
 
   // Apply theme preference
@@ -119,6 +122,8 @@ function App() {
         onLogin={login}
         onSignup={signup}
         onCreateChild={createChild}
+        onRequestReset={requestPasswordReset}
+        onResetPassword={resetPasswordByOTP}
       />
     );
   }
@@ -200,6 +205,7 @@ function App() {
             children={linkedKids}
             onClose={() => setShowSettings(false)}
             onUpdateSettings={(settings) => updateUserSettings(user.id, settings)}
+            onUpdateChildSettings={updateUserSettings}
             onCreateChild={createChild}
           />
         )}
@@ -408,6 +414,7 @@ function App() {
           children={linkedKids}
           onClose={() => setShowSettings(false)}
           onUpdateSettings={(settings) => updateUserSettings(user!.id, settings)}
+          onUpdateChildSettings={updateUserSettings}
           onCreateChild={createChild}
         />
       )}

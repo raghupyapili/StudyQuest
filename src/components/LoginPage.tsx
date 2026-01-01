@@ -7,9 +7,11 @@ interface LoginPageProps {
     onLogin: (username: string, password: string) => boolean;
     onSignup: (user: Omit<UserType, 'id'>) => UserType;
     onCreateChild: (parentId: string, childData: any) => void;
+    onRequestReset: (email: string) => string | null;
+    onResetPassword: (email: string, newPass: string) => void;
 }
 
-export function LoginPage({ onLogin, onSignup, onCreateChild }: LoginPageProps) {
+export function LoginPage({ onLogin, onSignup, onCreateChild, onRequestReset, onResetPassword }: LoginPageProps) {
     const [mode, setMode] = useState<'login' | 'signup'>('login');
     const [selectedRole, setSelectedRole] = useState<'student' | 'parent' | null>(null);
     const [username, setUsername] = useState('');
@@ -31,6 +33,14 @@ export function LoginPage({ onLogin, onSignup, onCreateChild }: LoginPageProps) 
     }[]>([]);
     const [showForgot, setShowForgot] = useState(false);
     const [showGuide, setShowGuide] = useState(false);
+
+    // Password Reset State
+    const [resetStep, setResetStep] = useState<'request' | 'otp' | 'newPassword'>('request');
+    const [resetEmail, setResetEmail] = useState('');
+    const [resetOTP, setResetOTP] = useState('');
+    const [generatedOTP, setGeneratedOTP] = useState('');
+    const [resetNewPass, setResetNewPass] = useState('');
+    const [resetError, setResetError] = useState('');
 
     const GUIDE_CONTENT = {
         title: "⚔️ StudyQuest: Tactical Education Command Guide",
@@ -457,15 +467,109 @@ export function LoginPage({ onLogin, onSignup, onCreateChild }: LoginPageProps) 
                         <div className="h-16 w-16 bg-primary/10 rounded-2xl flex items-center justify-center mx-auto text-primary">
                             <Lock className="w-8 h-8" />
                         </div>
-                        <h3 className="text-xl font-black text-white uppercase tracking-tighter">Security Protocol</h3>
-                        <p className="text-sm text-zinc-400 font-medium">
-                            To reset your credentials, please contact your commanding officer (Parent) or reach out to our support channel at <span className="text-primary">support@studyquest.com</span>.
-                        </p>
+                        <h3 className="text-xl font-black text-white uppercase tracking-tighter">
+                            {resetStep === 'request' ? 'Reset Protocol' : resetStep === 'otp' ? 'Verification' : 'Update Access Key'}
+                        </h3>
+
+                        {resetStep === 'request' ? (
+                            <div className="space-y-4">
+                                <p className="text-sm text-zinc-400 font-medium leading-relaxed">
+                                    Students: Contact your Parent to reset your key.<br />
+                                    Parents: Enter your registered mail identity to receive a reset OTP.
+                                </p>
+                                <input
+                                    type="email"
+                                    placeholder="yourname@sector.com"
+                                    value={resetEmail}
+                                    onChange={(e) => setResetEmail(e.target.value)}
+                                    className="w-full bg-zinc-800/40 border border-white/5 rounded-2xl px-5 py-4 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50"
+                                />
+                                {resetError && <p className="text-[10px] font-black text-red-500 uppercase tracking-widest">{resetError}</p>}
+                                <button
+                                    onClick={() => {
+                                        setResetError('');
+                                        const otp = onRequestReset(resetEmail);
+                                        if (otp) {
+                                            setGeneratedOTP(otp);
+                                            setResetStep('otp');
+                                        } else {
+                                            setResetError('Email not identified');
+                                        }
+                                    }}
+                                    className="w-full py-4 bg-primary text-white rounded-2xl text-[10px] font-black uppercase tracking-widest shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all"
+                                >
+                                    Request OTP
+                                </button>
+                            </div>
+                        ) : resetStep === 'otp' ? (
+                            <div className="space-y-4">
+                                <p className="text-sm text-zinc-400 font-medium leading-relaxed">
+                                    Enter the 4-digit code sent to your sector mail identity.
+                                </p>
+                                <input
+                                    type="text"
+                                    maxLength={4}
+                                    placeholder="0000"
+                                    value={resetOTP}
+                                    onChange={(e) => setResetOTP(e.target.value)}
+                                    className="w-full bg-zinc-800/40 border border-white/5 rounded-2xl px-5 py-4 text-center text-2xl font-black tracking-[1em] focus:outline-none focus:ring-2 focus:ring-primary/50"
+                                />
+                                {resetError && <p className="text-[10px] font-black text-red-500 uppercase tracking-widest">{resetError}</p>}
+                                <button
+                                    onClick={() => {
+                                        if (resetOTP === generatedOTP) {
+                                            setResetError('');
+                                            setResetStep('newPassword');
+                                        } else {
+                                            setResetError('Invalid Protocol Code');
+                                        }
+                                    }}
+                                    className="w-full py-4 bg-primary text-white rounded-2xl text-[10px] font-black uppercase tracking-widest shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all"
+                                >
+                                    Verify OTP
+                                </button>
+                                <p className="text-[9px] text-zinc-500 font-bold uppercase tracking-widest italic">
+                                    Simulation: Check browser console for OTP
+                                </p>
+                            </div>
+                        ) : (
+                            <div className="space-y-4">
+                                <p className="text-sm text-zinc-400 font-medium leading-relaxed">
+                                    Define your new secure access protocol.
+                                </p>
+                                <input
+                                    type="password"
+                                    placeholder="New Access Key"
+                                    value={resetNewPass}
+                                    onChange={(e) => setResetNewPass(e.target.value)}
+                                    className="w-full bg-zinc-800/40 border border-white/5 rounded-2xl px-5 py-4 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50"
+                                />
+                                <button
+                                    onClick={() => {
+                                        onResetPassword(resetEmail, resetNewPass);
+                                        setShowForgot(false);
+                                        setResetStep('request');
+                                        setResetEmail('');
+                                        setResetOTP('');
+                                        setResetNewPass('');
+                                        setError('Password Reset Successful');
+                                    }}
+                                    className="w-full py-4 bg-primary text-white rounded-2xl text-[10px] font-black uppercase tracking-widest shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all"
+                                >
+                                    Finalize Reset
+                                </button>
+                            </div>
+                        )}
+
                         <button
-                            onClick={() => setShowForgot(false)}
-                            className="w-full py-4 bg-zinc-800 rounded-2xl text-[10px] font-black uppercase tracking-widest text-white hover:bg-zinc-700"
+                            onClick={() => {
+                                setShowForgot(false);
+                                setResetStep('request');
+                                setResetError('');
+                            }}
+                            className="w-full py-4 bg-zinc-800 rounded-2xl text-[10px] font-black uppercase tracking-widest text-zinc-400 hover:text-white transition-colors"
                         >
-                            Back to Access
+                            Abort Protocol
                         </button>
                     </div>
                 </div>
