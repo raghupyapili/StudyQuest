@@ -22,6 +22,9 @@ export function SettingsModal({ user, children = [], onClose, onUpdateSettings, 
         statePreference: 'TS' as 'TS' | 'AP'
     });
     const [showAddChild, setShowAddChild] = useState(false);
+    const [resettingChildId, setResettingChildId] = useState<string | null>(null);
+    const [tempChildPass, setTempChildPass] = useState('');
+    const [resetSuccessId, setResetSuccessId] = useState<string | null>(null);
 
     if (!user) return null;
 
@@ -158,8 +161,8 @@ export function SettingsModal({ user, children = [], onClose, onUpdateSettings, 
 
                         <div className="grid gap-3">
                             {children.map(child => (
-                                <div key={child.id} className="space-y-2">
-                                    <div className="flex items-center justify-between p-4 bg-zinc-900/40 rounded-2xl border border-white/5">
+                                <div key={child.id} className="space-y-3 p-4 bg-zinc-900/40 rounded-2xl border border-white/5">
+                                    <div className="flex items-center justify-between">
                                         <div className="flex items-center gap-4">
                                             <div className="p-2.5 bg-zinc-800 rounded-xl text-lg">
                                                 <GraduationCap className="w-5 h-5 text-zinc-400" />
@@ -169,18 +172,56 @@ export function SettingsModal({ user, children = [], onClose, onUpdateSettings, 
                                                 <div className="text-[9px] text-zinc-500 font-bold uppercase tracking-widest">Class {child.grade} • {child.username}</div>
                                             </div>
                                         </div>
-                                        <button
-                                            onClick={() => {
-                                                const newPass = prompt(`Enter new Access Key for ${child.name}:`);
-                                                if (newPass) {
-                                                    onUpdateChildSettings(child.id, { password: newPass });
-                                                }
-                                            }}
-                                            className="px-3 py-1.5 bg-zinc-800 hover:bg-zinc-700 rounded-xl text-[8px] font-black text-zinc-400 hover:text-white uppercase tracking-widest transition-all"
-                                        >
-                                            Reset Access Key
-                                        </button>
+
+                                        {resetSuccessId === child.id ? (
+                                            <div className="px-3 py-1.5 bg-green-500/10 text-green-500 rounded-xl text-[8px] font-black uppercase tracking-widest animate-in fade-in zoom-in duration-300">
+                                                Key Updated
+                                            </div>
+                                        ) : resettingChildId !== child.id && (
+                                            <button
+                                                onClick={() => setResettingChildId(child.id)}
+                                                className="px-3 py-1.5 bg-zinc-800 hover:bg-zinc-700 rounded-xl text-[8px] font-black text-zinc-400 hover:text-white uppercase tracking-widest transition-all"
+                                            >
+                                                Reset Access Key
+                                            </button>
+                                        )}
                                     </div>
+
+                                    {resettingChildId === child.id && (
+                                        <div className="flex gap-2 animate-in slide-in-from-top-2 duration-200">
+                                            <input
+                                                autoFocus
+                                                type="text"
+                                                placeholder="Enter New Access Key"
+                                                value={tempChildPass}
+                                                onChange={(e) => setTempChildPass(e.target.value)}
+                                                className="flex-1 bg-zinc-900 border-none rounded-xl px-4 py-2 text-xs text-white focus:ring-1 focus:ring-primary/50 outline-none"
+                                            />
+                                            <button
+                                                onClick={() => {
+                                                    if (tempChildPass) {
+                                                        onUpdateChildSettings(child.id, { password: tempChildPass });
+                                                        setResetSuccessId(child.id);
+                                                        setResettingChildId(null);
+                                                        setTempChildPass('');
+                                                        setTimeout(() => setResetSuccessId(null), 3000);
+                                                    }
+                                                }}
+                                                className="px-4 py-2 bg-primary text-white rounded-xl text-[10px] font-black uppercase tracking-widest shadow-lg shadow-primary/20"
+                                            >
+                                                Save
+                                            </button>
+                                            <button
+                                                onClick={() => {
+                                                    setResettingChildId(null);
+                                                    setTempChildPass('');
+                                                }}
+                                                className="px-4 py-2 bg-zinc-800 text-zinc-500 rounded-xl text-[10px] font-black uppercase tracking-widest"
+                                            >
+                                                Cancel
+                                            </button>
+                                        </div>
+                                    )}
                                 </div>
                             ))}
                             {children.length === 0 && (

@@ -149,9 +149,9 @@ export function useAuth() {
     const requestPasswordReset = (email: string): string | null => {
         const user = users.find(u => u.email === email && u.role === 'parent');
         if (user) {
-            // In a real app, this would send an email. For simulation, we return it.
             const otp = Math.floor(1000 + Math.random() * 9000).toString();
             console.log(`[SIMULATION] OTP for ${email}: ${otp}`);
+            alert(`[TACTICAL OVERRIDE]\nA reset OTP has been generated for your sector: ${otp}\n(Simulation: In production, this would be sent to ${email})`);
             return otp;
         }
         return null;

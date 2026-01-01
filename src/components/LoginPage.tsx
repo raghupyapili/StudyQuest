@@ -41,6 +41,7 @@ export function LoginPage({ onLogin, onSignup, onCreateChild, onRequestReset, on
     const [generatedOTP, setGeneratedOTP] = useState('');
     const [resetNewPass, setResetNewPass] = useState('');
     const [resetError, setResetError] = useState('');
+    const [isResetLoading, setIsResetLoading] = useState(false);
 
     const GUIDE_CONTENT = {
         title: "⚔️ StudyQuest: Tactical Education Command Guide",
@@ -473,8 +474,14 @@ export function LoginPage({ onLogin, onSignup, onCreateChild, onRequestReset, on
 
                         {resetStep === 'request' ? (
                             <div className="space-y-4">
-                                <p className="text-sm text-zinc-400 font-medium leading-relaxed">
-                                    Students: Contact your Parent to reset your key.<br />
+                                <div className="p-4 bg-orange-500/10 border border-orange-500/20 rounded-2xl">
+                                    <p className="text-xs text-orange-500 font-black uppercase tracking-widest text-center mb-1">Attention Students</p>
+                                    <p className="text-[11px] text-zinc-400 font-medium leading-relaxed text-center">
+                                        For security reasons, your parents must reset your Access Key from their Command Center.
+                                    </p>
+                                </div>
+                                <div className="h-px bg-white/5 my-2"></div>
+                                <p className="text-sm text-zinc-400 font-medium leading-relaxed text-center">
                                     Parents: Enter your registered mail identity to receive a reset OTP.
                                 </p>
                                 <input
@@ -484,21 +491,42 @@ export function LoginPage({ onLogin, onSignup, onCreateChild, onRequestReset, on
                                     onChange={(e) => setResetEmail(e.target.value)}
                                     className="w-full bg-zinc-800/40 border border-white/5 rounded-2xl px-5 py-4 text-sm focus:outline-none focus:ring-2 focus:ring-primary/50"
                                 />
-                                {resetError && <p className="text-[10px] font-black text-red-500 uppercase tracking-widest">{resetError}</p>}
+                                {resetError && <p className="text-[10px] font-black text-red-500 uppercase tracking-widest text-center">{resetError}</p>}
                                 <button
+                                    disabled={isResetLoading}
                                     onClick={() => {
-                                        setResetError('');
-                                        const otp = onRequestReset(resetEmail);
-                                        if (otp) {
-                                            setGeneratedOTP(otp);
-                                            setResetStep('otp');
-                                        } else {
-                                            setResetError('Email not identified');
+                                        if (!resetEmail) {
+                                            setResetError('Mail identity required');
+                                            return;
                                         }
+                                        setIsResetLoading(true);
+                                        setResetError('');
+
+                                        // Simulate network delay
+                                        setTimeout(() => {
+                                            const otp = onRequestReset(resetEmail);
+                                            setIsResetLoading(false);
+                                            if (otp) {
+                                                setGeneratedOTP(otp);
+                                                setResetStep('otp');
+                                            } else {
+                                                setResetError('Email not identified as Parent');
+                                            }
+                                        }, 1500);
                                     }}
-                                    className="w-full py-4 bg-primary text-white rounded-2xl text-[10px] font-black uppercase tracking-widest shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all"
+                                    className={cn(
+                                        "w-full py-4 bg-primary text-white rounded-2xl text-[10px] font-black uppercase tracking-widest shadow-lg shadow-primary/20 hover:scale-[1.02] active:scale-95 transition-all flex items-center justify-center gap-2",
+                                        isResetLoading && "opacity-50 cursor-not-allowed"
+                                    )}
                                 >
-                                    Request OTP
+                                    {isResetLoading ? (
+                                        <>
+                                            <div className="h-3 w-3 border-2 border-white/30 border-t-white rounded-full animate-spin"></div>
+                                            Transmitting OTP...
+                                        </>
+                                    ) : (
+                                        'Request OTP'
+                                    )}
                                 </button>
                             </div>
                         ) : resetStep === 'otp' ? (
