@@ -7,7 +7,7 @@ interface LoginPageProps {
     onLogin: (username: string, password: string) => boolean;
     onSignup: (user: Omit<UserType, 'id'>) => UserType;
     onCreateChild: (parentId: string, childData: any) => void;
-    onRequestReset: (email: string) => string | null;
+    onRequestReset: (email: string) => { otp: string; username: string } | null;
     onResetPassword: (email: string, newPass: string) => void;
 }
 
@@ -42,6 +42,7 @@ export function LoginPage({ onLogin, onSignup, onCreateChild, onRequestReset, on
     const [resetNewPass, setResetNewPass] = useState('');
     const [resetError, setResetError] = useState('');
     const [isResetLoading, setIsResetLoading] = useState(false);
+    const [recoveredUsername, setRecoveredUsername] = useState('');
 
     const GUIDE_CONTENT = {
         title: "⚔️ StudyQuest: Tactical Education Command Guide",
@@ -318,7 +319,7 @@ export function LoginPage({ onLogin, onSignup, onCreateChild, onRequestReset, on
                                             onClick={() => setShowForgot(true)}
                                             className="text-[9px] font-black text-primary/60 hover:text-primary uppercase tracking-[0.2em] transition-colors"
                                         >
-                                            Forgot Access Key?
+                                            Forgot UserName or Password?
                                         </button>
                                     </div>
                                 )}
@@ -469,7 +470,7 @@ export function LoginPage({ onLogin, onSignup, onCreateChild, onRequestReset, on
                             <Lock className="w-8 h-8" />
                         </div>
                         <h3 className="text-xl font-black text-white uppercase tracking-tighter">
-                            {resetStep === 'request' ? 'Reset Protocol' : resetStep === 'otp' ? 'Verification' : 'Update Access Key'}
+                            {resetStep === 'request' ? 'Identity Recovery' : resetStep === 'otp' ? 'Verification' : 'Update Access Key'}
                         </h3>
 
                         {resetStep === 'request' ? (
@@ -504,10 +505,11 @@ export function LoginPage({ onLogin, onSignup, onCreateChild, onRequestReset, on
 
                                         // Simulate network delay
                                         setTimeout(() => {
-                                            const otp = onRequestReset(resetEmail);
+                                            const result = onRequestReset(resetEmail);
                                             setIsResetLoading(false);
-                                            if (otp) {
-                                                setGeneratedOTP(otp);
+                                            if (result) {
+                                                setGeneratedOTP(result.otp);
+                                                setRecoveredUsername(result.username);
                                                 setResetStep('otp');
                                             } else {
                                                 setResetError('Email not identified as Parent');
@@ -562,6 +564,10 @@ export function LoginPage({ onLogin, onSignup, onCreateChild, onRequestReset, on
                             </div>
                         ) : (
                             <div className="space-y-4">
+                                <div className="p-4 bg-primary/10 border border-primary/20 rounded-2xl text-center">
+                                    <p className="text-[10px] font-black text-primary uppercase tracking-widest mb-1">Recovered Codename</p>
+                                    <p className="text-xl font-black text-white italic tracking-tighter">{recoveredUsername}</p>
+                                </div>
                                 <p className="text-sm text-zinc-400 font-medium leading-relaxed">
                                     Define your new secure access protocol.
                                 </p>

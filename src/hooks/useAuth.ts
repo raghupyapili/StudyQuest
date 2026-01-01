@@ -21,12 +21,20 @@ export function useAuth() {
         const stored = localStorage.getItem(USERS_STORAGE_KEY);
         if (stored) return JSON.parse(stored);
 
-        // Migration from legacy keys if they exist
-        const v1Users = localStorage.getItem('study-quest-users-v1');
-        if (v1Users) {
-            const parsed = JSON.parse(v1Users);
-            localStorage.setItem(USERS_STORAGE_KEY, JSON.stringify(parsed));
-            return parsed;
+        const legacyKeys = ['study-quest-users-v1', 'study-quest-users-v2', 'study-quest-users-v3', 'study-quest-auth', 'users'];
+        for (const key of legacyKeys) {
+            const vUsers = localStorage.getItem(key);
+            if (vUsers) {
+                try {
+                    const parsed = JSON.parse(vUsers);
+                    // Handle cases where vUsers might be a list or the full auth state
+                    const usersArray = Array.isArray(parsed) ? parsed : (parsed.users || (parsed.user ? [parsed.user] : []));
+                    if (usersArray.length > 0) {
+                        localStorage.setItem(USERS_STORAGE_KEY, JSON.stringify(usersArray));
+                        return usersArray;
+                    }
+                } catch (e) { console.error(`Failed to migrate ${key}`, e); }
+            }
         }
 
         return [];
@@ -146,13 +154,13 @@ export function useAuth() {
         }
     };
 
-    const requestPasswordReset = (email: string): string | null => {
+    const requestPasswordReset = (email: string): { otp: string, username: string } | null => {
         const user = users.find(u => u.email === email && u.role === 'parent');
         if (user) {
             const otp = Math.floor(1000 + Math.random() * 9000).toString();
             console.log(`[SIMULATION] OTP for ${email}: ${otp}`);
             alert(`[TACTICAL OVERRIDE]\nA reset OTP has been generated for your sector: ${otp}\n(Simulation: In production, this would be sent to ${email})`);
-            return otp;
+            return { otp, username: user.username };
         }
         return null;
     };
