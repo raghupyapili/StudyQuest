@@ -24,6 +24,7 @@ export interface User {
     parentId?: string;
     notificationFrequency?: 'Daily' | 'Weekly' | 'Monthly';
     notifications?: StudyNotification[];
+    themePreference?: 'dark' | 'light';
 }
 
 export interface AuthState {

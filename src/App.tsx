@@ -10,6 +10,7 @@ import { ParentDashboard } from './components/ParentDashboard';
 import { PracticePapers } from './components/PracticePapers';
 import { useGameState } from './hooks/useGameState';
 import { useAuth } from './hooks/useAuth';
+import { SettingsModal } from './components/SettingsModal';
 import { syllabusData } from './data/syllabus';
 import { getGradeTheme } from './lib/themes';
 import type { Chapter, Subject } from './data/syllabus';
@@ -27,6 +28,7 @@ function App() {
 
   const [currentView, setCurrentView] = useState('dashboard');
   const [selectedChapter, setSelectedChapter] = useState<Chapter | null>(null);
+  const [showSettings, setShowSettings] = useState(false);
 
   const {
     state, completeChapter, uncompleteChapter, completePracticePaper,
@@ -41,6 +43,15 @@ function App() {
 
   const { addNotification, markNotificationRead, updateUserSettings } = useAuth();
   const [showStudentNotice, setShowStudentNotice] = useState(false);
+
+  // Apply theme preference
+  useEffect(() => {
+    if (user?.themePreference === 'light') {
+      document.documentElement.classList.add('light');
+    } else {
+      document.documentElement.classList.remove('light');
+    }
+  }, [user?.themePreference]);
 
   const currentGrade = state.settings.grade || '10';
   const baseSyllabus = (syllabusData[currentGrade] || syllabusData['10']).filter(sub => {
@@ -143,12 +154,22 @@ function App() {
                 <p className="text-[10px] font-black text-zinc-500 uppercase tracking-widest">Parent Gateway</p>
                 <p className="text-sm font-black text-white">{user.name}</p>
               </div>
-              <button
-                onClick={logout}
-                className="p-2 bg-zinc-800 hover:bg-zinc-700 rounded-xl transition-all border border-white/5 text-zinc-400 hover:text-white"
-              >
-                <LogOut className="w-5 h-5" />
-              </button>
+              <div className="flex items-center gap-3">
+                <button
+                  onClick={() => setShowSettings(true)}
+                  className="p-2 bg-zinc-800 hover:bg-zinc-700 rounded-xl transition-all border border-white/5 text-zinc-400 hover:text-white"
+                  title="System Configuration"
+                >
+                  <SettingsIcon className="w-5 h-5" />
+                </button>
+                <button
+                  onClick={logout}
+                  className="p-2 bg-zinc-800 hover:bg-zinc-700 rounded-xl transition-all border border-white/5 text-zinc-400 hover:text-white"
+                  title="Secure Logout"
+                >
+                  <LogOut className="w-5 h-5" />
+                </button>
+              </div>
             </div>
           </div>
         </header>
@@ -168,6 +189,15 @@ function App() {
           addCustomSubTopic={addCustomSubTopic}
           customChapters={state.settings.customChapters}
         />
+        {showSettings && (
+          <SettingsModal
+            user={user}
+            children={linkedKids}
+            onClose={() => setShowSettings(false)}
+            onUpdateSettings={(settings) => updateUserSettings(user.id, settings)}
+            onCreateChild={createChild}
+          />
+        )}
       </div>
     );
   }
@@ -248,11 +278,12 @@ function App() {
           currentView={currentView}
           setView={setCurrentView}
           onLogout={logout}
+          onOpenSettings={() => setShowSettings(true)}
           grade={currentGrade}
         />
       </div>
 
-      <main className="flex-1 overflow-y-auto relative bg-[#0a0a0a]">
+      <main className="flex-1 overflow-y-auto relative bg-background">
         <div className="absolute inset-0 bg-[url('https://grainy-gradients.vercel.app/noise.svg')] opacity-20 pointer-events-none mix-blend-overlay"></div>
 
         <div className="max-w-7xl mx-auto min-h-full relative z-10 pb-20">
@@ -262,7 +293,7 @@ function App() {
               className="absolute inset-0 bg-no-repeat bg-cover bg-center transition-all duration-700"
               style={{ backgroundImage: `url("${theme.bgImage}")` }}
             ></div>
-            <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-[#0a0a0a]/40 to-transparent"></div>
+            <div className="absolute inset-0 bg-gradient-to-t from-background via-background/40 to-transparent"></div>
 
             {/* Animated Glow */}
             <div className={cn(
@@ -364,6 +395,15 @@ function App() {
           deletePlanTask={deletePlanTask}
           updateChapterPlan={updateChapterPlan}
           onClose={() => setSelectedChapter(null)}
+        />
+      )}
+      {showSettings && (
+        <SettingsModal
+          user={user}
+          children={linkedKids}
+          onClose={() => setShowSettings(false)}
+          onUpdateSettings={(settings) => updateUserSettings(user!.id, settings)}
+          onCreateChild={createChild}
         />
       )}
     </div>

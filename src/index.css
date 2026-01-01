@@ -34,19 +34,78 @@
 
     --radius: 0.75rem;
   }
-}
 
-@layer base {
+  .light {
+    --background: 0 0% 100%;
+    --foreground: 240 10% 3.9%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 240 10% 3.9%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 240 10% 3.9%;
+
+    --primary: 262 83% 58%;
+    --primary-foreground: 210 40% 98%;
+
+    --secondary: 240 4.8% 95.9%;
+    --secondary-foreground: 240 5.9% 10%;
+
+    --muted: 240 4.8% 95.9%;
+    --muted-foreground: 240 3.8% 46.1%;
+
+    --accent: 240 4.8% 95.9%;
+    --accent-foreground: 240 5.9% 10%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 240 5.9% 90%;
+    --input: 240 5.9% 90%;
+    --ring: 240 5% 64.9%;
+  }
+
   * {
     @apply border-border;
   }
+
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground transition-colors duration-300;
   }
 }
 
 .glass-card {
   @apply bg-zinc-900/50 backdrop-blur-md border border-zinc-800 shadow-xl;
+}
+
+.light .glass-card {
+  @apply bg-white/80 border-zinc-200 shadow-md;
+}
+
+.light .bg-zinc-900\/40,
+.light .bg-zinc-900\/20,
+.light .bg-zinc-900\/50,
+.light .bg-zinc-950,
+.light .bg-zinc-950\/80,
+.light .bg-black\/40,
+.light .bg-black\/80 {
+  background-color: theme('colors.zinc.50');
+}
+
+.light .text-zinc-400,
+.light .text-zinc-500,
+.light .text-zinc-600 {
+  color: theme('colors.zinc.600');
+}
+
+.light .text-white,
+.light .text-zinc-200 {
+  color: theme('colors.zinc.900');
+}
+
+.light .border-white\/5,
+.light .border-zinc-800 {
+  border-color: theme('colors.zinc.200');
 }
 
 .neon-text {
@@ -57,12 +116,15 @@
 ::-webkit-scrollbar {
   width: 8px;
 }
+
 ::-webkit-scrollbar-track {
   background: transparent;
 }
+
 ::-webkit-scrollbar-thumb {
   @apply bg-zinc-700 rounded-full;
 }
+
 ::-webkit-scrollbar-thumb:hover {
   @apply bg-zinc-600;
 }

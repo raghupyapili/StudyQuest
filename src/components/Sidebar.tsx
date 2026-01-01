@@ -1,12 +1,13 @@
 import React from 'react';
 import { syllabusData } from '../data/syllabus';
 import { cn } from '../lib/utils';
-import { LayoutDashboard, BookOpen, Calculator, FlaskConical, Globe, Feather, Timer, LogOut, FileText } from 'lucide-react';
+import { LayoutDashboard, BookOpen, Calculator, FlaskConical, Globe, Feather, Timer, LogOut, FileText, Settings } from 'lucide-react';
 
 interface SidebarProps {
     currentView: string;
     setView: (view: string) => void;
     onLogout: () => void;
+    onOpenSettings: () => void;
     grade: string;
 }
 
@@ -18,7 +19,7 @@ const iconMap: Record<string, React.ElementType> = {
     Feather
 };
 
-export function Sidebar({ currentView, setView, onLogout, grade }: SidebarProps) {
+export function Sidebar({ currentView, setView, onLogout, onOpenSettings, grade }: SidebarProps) {
     const currentSyllabus = syllabusData[grade] || syllabusData['10'];
 
     return (
@@ -108,6 +109,14 @@ export function Sidebar({ currentView, setView, onLogout, grade }: SidebarProps)
                         Consistency beats intensity. Set your pace, win the race.
                     </p>
                 </div>
+
+                <button
+                    onClick={onOpenSettings}
+                    className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-zinc-900 hover:bg-white/5 text-zinc-400 hover:text-white rounded-xl transition-all text-xs font-bold border border-white/5"
+                >
+                    <Settings className="h-4 w-4" />
+                    System Settings
+                </button>
 
                 <button
                     onClick={onLogout}
