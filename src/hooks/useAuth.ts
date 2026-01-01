@@ -19,8 +19,17 @@ export function useAuth() {
 
     const [users, setUsers] = useState<User[]>(() => {
         const stored = localStorage.getItem(USERS_STORAGE_KEY);
-        // Remove default users for a clean slate, or migrate them if they exist
-        return stored ? JSON.parse(stored) : [];
+        if (stored) return JSON.parse(stored);
+
+        // Migration from legacy keys if they exist
+        const v1Users = localStorage.getItem('study-quest-users-v1');
+        if (v1Users) {
+            const parsed = JSON.parse(v1Users);
+            localStorage.setItem(USERS_STORAGE_KEY, JSON.stringify(parsed));
+            return parsed;
+        }
+
+        return [];
     });
 
     useEffect(() => {

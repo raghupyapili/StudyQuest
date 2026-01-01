@@ -26,6 +26,9 @@ export function Sidebar({ currentView, setView, onLogout, onOpenSettings, grade 
         <div className="w-64 border-r border-white/5 h-full bg-[#0d0d0d] flex flex-col p-4 shadow-2xl">
             <div className="mb-8 flex items-center justify-between px-2">
                 <div className="flex items-center gap-2">
+                    <div className="h-8 w-8 bg-primary rounded-lg flex items-center justify-center shadow-lg shadow-primary/20 overflow-hidden">
+                        <img src="/logo.png" alt="Logo" className="w-full h-full object-cover" />
+                    </div>
                     <div className="h-8 w-8 bg-primary rounded-lg flex items-center justify-center shadow-lg shadow-primary/20">
                         <BookOpen className="text-white h-5 w-5" />
                     </div>
@@ -126,7 +129,8 @@ export function Sidebar({ currentView, setView, onLogout, onOpenSettings, grade 
                     Secure Logout
                 </button>
 
-                <div className="text-[9px] text-zinc-700 text-center uppercase tracking-[0.25em] font-black pb-2">
+                <div className="text-[9px] text-zinc-700 flex items-center justify-center gap-1.5 uppercase tracking-[0.25em] font-black pb-2">
+                    <img src="/logo.png" alt="" className="w-3 h-3 grayscale opacity-40" />
                     StudyQuest v3.0.0 Stable
                 </div>
             </div>

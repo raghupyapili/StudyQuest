@@ -190,11 +190,7 @@ export function Dashboard({ state, user, currentSyllabus, onSelectChapter, onUpd
                         return (
                             <div key={subject.id} className="glass-card p-5 rounded-[1.5rem] border border-white/5 relative overflow-hidden group hover:border-white/10 transition-all">
                                 <div className="absolute -right-4 -bottom-4 opacity-10 group-hover:opacity-20 transition-all duration-700 pointer-events-none">
-                                    {(subject.id === 'math' || subject.id === 'telugu') ? (
-                                        <img src="bheem_character_1766931860773.png" alt="Bheem" className="w-24 h-24 object-contain" />
-                                    ) : (
-                                        <img src="chutki_character_1766931881289.png" alt="Chutki" className="w-24 h-24 object-contain" />
-                                    )}
+                                    <Sparkles className={cn("w-24 h-24 opacity-10", subject.color)} />
                                 </div>
                                 <div className={cn("text-[10px] font-black mb-2 uppercase tracking-[0.15em]", subject.color)}>
                                     {subject.name}

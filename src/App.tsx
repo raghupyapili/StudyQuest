@@ -131,9 +131,14 @@ function App() {
         <header className="border-b border-white/5 bg-zinc-900/50 backdrop-blur-3xl sticky top-0 z-50">
           <div className="max-w-7xl mx-auto px-8 py-4 flex items-center justify-between">
             <div className="flex items-center gap-6">
-              <h1 className="text-2xl font-black italic tracking-tighter text-white">
-                STUDY<span className="text-orange-500">QUEST</span>
-              </h1>
+              <div className="flex items-center gap-3">
+                <div className="h-8 w-8 bg-primary rounded-lg flex items-center justify-center shadow-lg shadow-primary/20 overflow-hidden">
+                  <img src="/logo.png" alt="Logo" className="w-full h-full object-cover" />
+                </div>
+                <h1 className="text-2xl font-black italic tracking-tighter text-white">
+                  STUDY<span className="text-orange-500">QUEST</span>
+                </h1>
+              </div>
               <div className="h-8 w-px bg-white/10"></div>
               <div className="flex items-center gap-2">
                 <span className="text-[10px] font-black text-zinc-500 uppercase tracking-widest">Active Ward:</span>

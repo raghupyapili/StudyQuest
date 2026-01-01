@@ -34,30 +34,62 @@ export function LoginPage({ onLogin, onSignup, onCreateChild }: LoginPageProps) 
 
     const GUIDE_CONTENT = {
         title: "⚔️ StudyQuest: Tactical Education Command Guide",
+        intro: "Welcome to StudyQuest, a gamified strategic learning platform designed to turn academic study into a high-stakes mission. Whether you are class 6 or class 10, your curriculum is now your battlefield.",
         sections: [
             {
                 title: "🚀 1. Deployment (Getting Started)",
                 items: [
                     "Access the Link: Open the Vercel link shared with you.",
-                    "Enlist (Sign Up): Choose 'Parent' to manage child profiles or 'Student' to start learning directly.",
-                    "Strategic Synchronization: App automatically loads curriculum based on the selected Grade."
+                    "Enlist (Sign Up):",
+                    "For Parents: Choose the \"Parent\" role. You will be prompted to create your account and then set up a Child Profile. This is where you define your kid's Grade (6-10), State Preference (TS/AP), and Second Language (Hindi/Telugu).",
+                    "For Students: Your parent can create your account for you, or you can sign up as a \"Student\" directly.",
+                    "Strategic Synchronization: Once logged in, the app automatically loads the curriculum based on the selected Grade."
                 ]
             },
             {
                 title: "🎖️ 2. The Hero's Path (Student Dashboard)",
                 items: [
-                    "Rank Progression: Earn Ranks (Recruit to Hashira) as you complete sub-units.",
-                    "Battle Missions: Each subject is themed (e.g., Math is Thunder Breathing).",
-                    "Chapter Details: Mark sub-topics as 'Secured', track critical targets, and set focus timers."
+                    "The student's view is designed like a tactical RPG.",
+                    "Rank Progression: You start as a Recruit (Class 9) or Mizunoto (Class 10). As you complete sub-units and chapters, your mastery percentage increases, unlocking new Ranks like Avenger or Hashira.",
+                    "XP & Levels: Every action (marking a sub-topic done, completing a chapter) earns XP. Level up to show your dedication.",
+                    "Battle Missions: The center of the dashboard shows your current subjects. Each subject is themed (e.g., Math is Thunder Breathing if you're in Class 10).",
+                    "Chapter Details: Click any chapter to enter the Battle Plan view:",
+                    "- Sub-topics: Mark individual units as \"Secured\" to gain progress.",
+                    "- Critical Units: Look for the pulsating CRITICAL badge. These are priority targets set by your parent.",
+                    "- Battle Tasks: Create your own checklist (e.g., \"Watch YouTube video\", \"Solve exercise 2.1\").",
+                    "Grind Mode: Use the built-in Pomodoro Timer to stay focused during intense study sessions.",
+                    "Battle Resources: Access practice papers in the side menu to test your power."
                 ]
             },
             {
                 title: "🛰️ 3. The Command Center (Parent Dashboard)",
                 items: [
-                    "Monitoring Station: Real-time progress bars for every subject.",
-                    "Strategic Deadlines: Set target dates to create 'Parental Priority ALPHA' missions.",
-                    "Tactical Overrides: Inject custom modules or sub-units to track specific school assignments.",
-                    "Prioritization: Use the Star icon to mark CRITICAL topics for your child."
+                    "The parent's view provides high-level intelligence and tactical control.",
+                    "Monitoring Station: See real-time progress bars for every subject.",
+                    "Strategic Deadlines: Click on any chapter to set a Target Date. This creates a countdown for your child and marks it as a \"Parental Priority ALPHA\" mission.",
+                    "Tactical Overrides (Inject Module): If your child has extra school work or a specific project, use the \"+\" button on any subject to \"Inject\" a custom module.",
+                    "Inject Tactical Sub-Units: Inside any chapter, you can add custom sub-topics to track specific school assignments.",
+                    "Prioritization (Star Icon): Click the Star icon next to any sub-topic to mark it as CRITICAL. This highlights the topic in orange and makes it blink on the student's dashboard—ensuring they don't miss the most important parts.",
+                    "Logistics Intelligence: You will receive notifications on your dashboard when your child completes modules or reaches milestones."
+                ]
+            },
+            {
+                title: "🎨 4. Grade-Specific Themes",
+                items: [
+                    "The app transforms based on the student's grade:",
+                    "Class 10: Demon Slayer (Breathing Techniques & Hashira Ranks)",
+                    "Class 9: Avengers Initiative (S.H.I.E.L.D Ranks & Stark Tech)",
+                    "Class 8: Konoha Ninja Academy (Jutsu Mastery & Hokage Ranks)",
+                    "Class 7: Omnitrix Hero (Alien Transformations & Plumber Ranks)",
+                    "Class 6: Dholakpur Heroes (Laddo Power & Village Guardian Ranks)"
+                ]
+            },
+            {
+                title: "💡 Tips for Testing",
+                items: [
+                    "Try Marking Progress: As a student, mark 4-5 sub-topics in a chapter and notice how the Circular Progress bar on the main dashboard updates.",
+                    "Set a Deadline: As a parent, set a deadline for tomorrow and see the \"Critical Targets\" section show \"1d REMAINING\" with a red alert.",
+                    "Toggle Critical: Mark a sub-topic as critical in the Parent view, then switch to the Student view (or refresh) to see the orange \"CRITICAL\" badge."
                 ]
             }
         ]
@@ -139,8 +171,13 @@ export function LoginPage({ onLogin, onSignup, onCreateChild }: LoginPageProps) 
                 {/* Visual Side */}
                 <div className="p-12 bg-gradient-to-br from-primary/20 to-purple-600/20 flex flex-col justify-between border-r border-white/5">
                     <div>
-                        <div className="h-12 w-12 bg-primary rounded-2xl flex items-center justify-center shadow-2xl shadow-primary/20 mb-8 border border-white/10">
-                            <BookOpen className="text-white h-6 w-6" />
+                        <div className="flex items-center gap-4 mb-8">
+                            <div className="h-12 w-12 bg-primary rounded-2xl flex items-center justify-center shadow-2xl shadow-primary/20 border border-white/10 overflow-hidden">
+                                <img src="/logo.png" alt="StudyQuest Logo" className="w-full h-full object-cover" />
+                            </div>
+                            <div className="h-12 w-12 bg-primary rounded-2xl flex items-center justify-center shadow-2xl shadow-primary/20 border border-white/10">
+                                <BookOpen className="text-white h-6 w-6" />
+                            </div>
                         </div>
                         <h1 className="text-5xl font-black text-white italic tracking-tighter mb-6 leading-none">STUDY<br /><span className="text-primary not-italic">QUEST</span></h1>
                         <p className="text-zinc-400 font-medium leading-relaxed">
@@ -390,9 +427,15 @@ export function LoginPage({ onLogin, onSignup, onCreateChild }: LoginPageProps) 
                         </button>
                     </form>
 
-                    <p className="mt-8 text-center text-zinc-600 text-[10px] font-black uppercase tracking-widest">
-                        Deployment Status: <span className="text-green-500">Online</span> • Sector: <span className="text-white">Live</span>
-                    </p>
+                    <div className="mt-8 space-y-2 text-center">
+                        <p className="text-zinc-600 text-[10px] font-black uppercase tracking-widest">
+                            Deployment Status: <span className="text-green-500">Online</span> • Sector: <span className="text-white">Live</span>
+                        </p>
+                        <div className="text-zinc-700 text-[9px] font-black uppercase tracking-[0.25em] flex items-center justify-center gap-1.5 opacity-50">
+                            <img src="/logo.png" alt="" className="w-3 h-3 grayscale" />
+                            StudyQuest v3.0.0 Stable
+                        </div>
+                    </div>
                 </div>
             </div>
 
@@ -427,11 +470,17 @@ export function LoginPage({ onLogin, onSignup, onCreateChild }: LoginPageProps) 
                             <X className="w-6 h-6" />
                         </button>
 
-                        <div className="space-y-2">
-                            <h2 className="text-4xl font-black text-white uppercase tracking-tighter italic">
-                                {GUIDE_CONTENT.title}
-                            </h2>
+                        <div className="space-y-4">
+                            <div className="flex items-center gap-4">
+                                <div className="h-10 w-10 bg-primary rounded-xl flex items-center justify-center shadow-lg overflow-hidden shrink-0">
+                                    <img src="/logo.png" alt="Logo" className="w-full h-full object-cover" />
+                                </div>
+                                <h2 className="text-4xl font-black text-white uppercase tracking-tighter italic">
+                                    {GUIDE_CONTENT.title}
+                                </h2>
+                            </div>
                             <div className="h-1.5 w-32 bg-primary rounded-full"></div>
+                            <p className="text-sm font-bold text-zinc-400 leading-relaxed uppercase tracking-widest italic">{(GUIDE_CONTENT as any).intro}</p>
                         </div>
 
                         <div className="grid gap-8">
