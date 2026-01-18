@@ -25,6 +25,7 @@ export interface User {
     notificationFrequency?: 'Daily' | 'Weekly' | 'Monthly';
     notifications?: StudyNotification[];
     themePreference?: 'dark' | 'light';
+    visualThemeId?: string;
 }
 
 export interface AuthState {
@@ -32,7 +33,7 @@ export interface AuthState {
     user: User | null;
 }
 
-export type SubjectId = 'math' | 'science' | 'social' | 'english' | 'telugu' | 'hindi' | 'sanskrit' | 'computer' | 'ai';
+export type SubjectId = 'math' | 'science' | 'social' | 'english' | 'telugu' | 'hindi' | 'sanskrit' | 'computer' | 'ai' | 'physics' | 'chemistry' | 'biology';
 
 export interface StudyTask {
     id: string;

@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { Lock, BookOpen, X, ChevronRight, Info } from 'lucide-react';
 import { cn } from '../lib/utils';
 import type { User as UserType } from '../types';
+import { AVAILABLE_THEMES } from '../lib/themes';
 
 interface LoginPageProps {
     onLogin: (username: string, password: string) => boolean;
@@ -22,6 +23,7 @@ export function LoginPage({ onLogin, onSignup, onCreateChild, onRequestReset, on
     const [secondLanguage, setSecondLanguage] = useState<'Hindi' | 'Telugu'>('Telugu');
     const [error, setError] = useState('');
     const [statePreference, setStatePreference] = useState<'TS' | 'AP'>('TS');
+    const [visualThemeId, setVisualThemeId] = useState('');
     const [kids, setKids] = useState<{
         name: string,
         username: string,
@@ -29,7 +31,8 @@ export function LoginPage({ onLogin, onSignup, onCreateChild, onRequestReset, on
         email?: string,
         grade: string,
         secondLanguage: 'Hindi' | 'Telugu',
-        statePreference: 'TS' | 'AP'
+        statePreference: 'TS' | 'AP',
+        visualThemeId: string
     }[]>([]);
     const [showForgot, setShowForgot] = useState(false);
     const [showGuide, setShowGuide] = useState(false);
@@ -140,7 +143,8 @@ export function LoginPage({ onLogin, onSignup, onCreateChild, onRequestReset, on
                     email: email || undefined,
                     grade: selectedRole === 'student' ? grade : undefined,
                     secondLanguage: selectedRole === 'student' ? secondLanguage : undefined,
-                    statePreference: selectedRole === 'student' ? statePreference : undefined
+                    statePreference: selectedRole === 'student' ? statePreference : undefined,
+                    visualThemeId: selectedRole === 'student' ? visualThemeId : undefined
                 });
 
                 // If parent, create kid profiles too
@@ -163,7 +167,8 @@ export function LoginPage({ onLogin, onSignup, onCreateChild, onRequestReset, on
             email: '',
             grade: '10',
             secondLanguage: 'Telugu',
-            statePreference: 'TS'
+            statePreference: 'TS',
+            visualThemeId: ''
         }]);
     };
 
@@ -340,6 +345,8 @@ export function LoginPage({ onLogin, onSignup, onCreateChild, onRequestReset, on
                                                 <option value="8">Class 8</option>
                                                 <option value="9">Class 9</option>
                                                 <option value="10">Class 10</option>
+                                                <option value="11">Class 11</option>
+                                                <option value="12">Class 12</option>
                                             </select>
                                         </div>
                                         <div>
@@ -367,6 +374,21 @@ export function LoginPage({ onLogin, onSignup, onCreateChild, onRequestReset, on
                                             </select>
                                         </div>
                                     )}
+                                    <div>
+                                        <label className="text-[10px] font-black text-zinc-500 uppercase tracking-widest ml-1 block mb-2">Theme Preference</label>
+                                        <select
+                                            value={visualThemeId}
+                                            onChange={(e) => setVisualThemeId(e.target.value)}
+                                            className="w-full bg-zinc-800/40 border border-white/5 rounded-2xl px-5 py-4 text-sm focus:outline-none"
+                                        >
+                                            <option value="">Auto (Based on Class)</option>
+                                            {AVAILABLE_THEMES.map((theme) => (
+                                                <option key={theme.id} value={theme.id}>
+                                                    {theme.name}
+                                                </option>
+                                            ))}
+                                        </select>
+                                    </div>
                                 </div>
                             )}
 
@@ -402,6 +424,8 @@ export function LoginPage({ onLogin, onSignup, onCreateChild, onRequestReset, on
                                                     <option value="8">Class 8</option>
                                                     <option value="9">Class 9</option>
                                                     <option value="10">Class 10</option>
+                                                    <option value="11">Class 11</option>
+                                                    <option value="12">Class 12</option>
                                                 </select>
                                             </div>
                                             <div className="grid grid-cols-2 gap-2">
@@ -427,6 +451,18 @@ export function LoginPage({ onLogin, onSignup, onCreateChild, onRequestReset, on
                                                 onChange={(e) => updateKid(i, 'email', e.target.value)}
                                                 className="w-full bg-zinc-900/50 border border-white/5 rounded-xl px-4 py-2 text-xs"
                                             />
+                                            <select
+                                                value={kid.visualThemeId}
+                                                onChange={(e) => updateKid(i, 'visualThemeId', e.target.value)}
+                                                className="w-full bg-zinc-900/50 border border-white/5 rounded-xl px-4 py-2 text-xs"
+                                            >
+                                                <option value="">Auto Theme</option>
+                                                {AVAILABLE_THEMES.map((theme) => (
+                                                    <option key={theme.id} value={theme.id}>
+                                                        {theme.name}
+                                                    </option>
+                                                ))}
+                                            </select>
                                         </div>
                                     ))}
                                 </div>

@@ -1,4 +1,4 @@
-export type SubjectId = 'math' | 'science' | 'social' | 'english' | 'telugu' | 'hindi' | 'sanskrit' | 'computer' | 'ai';
+export type SubjectId = 'math' | 'science' | 'social' | 'english' | 'telugu' | 'hindi' | 'sanskrit' | 'computer' | 'ai' | 'physics' | 'chemistry' | 'biology';
 
 export interface SubTopic {
     id: string;
@@ -564,6 +564,242 @@ export const syllabusData: GradeSyllabus = {
             icon: 'Feather',
             chapters: [
                 { id: 't6-1', name: 'అభినందన', isCompleted: false, xpReward: 120 },
+            ]
+        }
+    ],
+    "11": [
+        {
+            id: 'math',
+            name: 'Mathematics',
+            color: 'text-blue-500',
+            icon: 'Calculator',
+            chapters: [
+                { id: 'm11-1', name: 'Sets', isCompleted: false, xpReward: 100 },
+                { id: 'm11-2', name: 'Relations and Functions', isCompleted: false, xpReward: 120 },
+                { id: 'm11-3', name: 'Trigonometric Functions', isCompleted: false, xpReward: 150 },
+                { id: 'm11-4', name: 'Complex Numbers and Quadratic Equations', isCompleted: false, xpReward: 130 },
+                { id: 'm11-5', name: 'Linear Inequalities', isCompleted: false, xpReward: 110 },
+                { id: 'm11-6', name: 'Permutations and Combinations', isCompleted: false, xpReward: 140 },
+                { id: 'm11-7', name: 'Binomial Theorem', isCompleted: false, xpReward: 120 },
+                { id: 'm11-8', name: 'Sequence and Series', isCompleted: false, xpReward: 130 },
+                { id: 'm11-9', name: 'Straight Lines', isCompleted: false, xpReward: 140 },
+                { id: 'm11-10', name: 'Conic Sections', isCompleted: false, xpReward: 130 },
+                { id: 'm11-11', name: 'Introduction to Three Dimensional Geometry', isCompleted: false, xpReward: 110 },
+                { id: 'm11-12', name: 'Limits and Derivatives', isCompleted: false, xpReward: 160 },
+                { id: 'm11-13', name: 'Statistics', isCompleted: false, xpReward: 120 },
+                { id: 'm11-14', name: 'Probability', isCompleted: false, xpReward: 120 },
+            ]
+        },
+        {
+            id: 'physics',
+            name: 'Physics',
+            color: 'text-emerald-500',
+            icon: 'Atom', // Need to check if Atom exists or use generic
+            chapters: [
+                { id: 'p11-1', name: 'Units and Measurements', isCompleted: false, xpReward: 100 },
+                { id: 'p11-2', name: 'Motion in a Straight Line', isCompleted: false, xpReward: 120 },
+                { id: 'p11-3', name: 'Motion in a Plane', isCompleted: false, xpReward: 130 },
+                { id: 'p11-4', name: 'Laws of Motion', isCompleted: false, xpReward: 150 },
+                { id: 'p11-5', name: 'Work, Energy and Power', isCompleted: false, xpReward: 140 },
+                { id: 'p11-6', name: 'System of Particles and Rotational Motion', isCompleted: false, xpReward: 160 },
+                { id: 'p11-7', name: 'Gravitation', isCompleted: false, xpReward: 130 },
+                { id: 'p11-8', name: 'Mechanical Properties of Solids', isCompleted: false, xpReward: 110 },
+                { id: 'p11-9', name: 'Mechanical Properties of Fluids', isCompleted: false, xpReward: 120 },
+                { id: 'p11-10', name: 'Thermal Properties of Matter', isCompleted: false, xpReward: 120 },
+                { id: 'p11-11', name: 'Thermodynamics', isCompleted: false, xpReward: 140 },
+                { id: 'p11-12', name: 'Kinetic Theory', isCompleted: false, xpReward: 110 },
+                { id: 'p11-13', name: 'Oscillations', isCompleted: false, xpReward: 130 },
+                { id: 'p11-14', name: 'Waves', isCompleted: false, xpReward: 130 },
+            ]
+        },
+        {
+            id: 'chemistry',
+            name: 'Chemistry',
+            color: 'text-teal-500',
+            icon: 'FlaskConical',
+            chapters: [
+                { id: 'c11-1', name: 'Some Basic Concepts of Chemistry', isCompleted: false, xpReward: 110 },
+                { id: 'c11-2', name: 'Structure of Atom', isCompleted: false, xpReward: 130 },
+                { id: 'c11-3', name: 'Classification of Elements and Periodicity', isCompleted: false, xpReward: 120 },
+                { id: 'c11-4', name: 'Chemical Bonding and Molecular Structure', isCompleted: false, xpReward: 150 },
+                { id: 'c11-5', name: 'Thermodynamics', isCompleted: false, xpReward: 140 },
+                { id: 'c11-6', name: 'Equilibrium', isCompleted: false, xpReward: 150 },
+                { id: 'c11-7', name: 'Redox Reactions', isCompleted: false, xpReward: 110 },
+                { id: 'c11-8', name: 'Organic Chemistry: Basic Principles', isCompleted: false, xpReward: 160 },
+                { id: 'c11-9', name: 'Hydrocarbons', isCompleted: false, xpReward: 140 },
+            ]
+        },
+        {
+            id: 'english',
+            name: 'English (Hornbill & Snapshot)',
+            color: 'text-rose-500',
+            icon: 'BookOpen',
+            chapters: [
+                { id: 'e11-1', name: 'The Portrait of a Lady', isCompleted: false, xpReward: 100 },
+                { id: 'e11-2', name: 'We\'re Not Afraid to Die', isCompleted: false, xpReward: 110 },
+                { id: 'e11-3', name: 'Discovering Tut', isCompleted: false, xpReward: 110 },
+                { id: 'e11-4', name: 'The Adventure', isCompleted: false, xpReward: 120 },
+                { id: 'e11-5', name: 'Silk Road', isCompleted: false, xpReward: 110 },
+                { id: 'e11-6', name: 'The Summer of the Beautiful White Horse', isCompleted: false, xpReward: 100 },
+                { id: 'e11-7', name: 'The Address', isCompleted: false, xpReward: 100 },
+                { id: 'e11-8', name: 'Mother\'s Day', isCompleted: false, xpReward: 110 },
+            ]
+        },
+        {
+            id: 'computer',
+            name: 'Computer Science (Python)',
+            color: 'text-cyan-500',
+            icon: 'Monitor',
+            chapters: [
+                { id: 'cs11-1', name: 'Computer Systems and Organisation', isCompleted: false, xpReward: 120 },
+                { id: 'cs11-2', name: 'Computational Thinking and Programming - 1', isCompleted: false, xpReward: 150 },
+                { id: 'cs11-3', name: 'Society, Law and Ethics', isCompleted: false, xpReward: 100 },
+            ]
+        },
+        {
+            id: 'biology',
+            name: 'Biology',
+            color: 'text-green-600',
+            icon: 'Microscope',
+            chapters: [
+                { id: 'b11-1', name: 'The Living World', isCompleted: false, xpReward: 100 },
+                { id: 'b11-2', name: 'Biological Classification', isCompleted: false, xpReward: 110 },
+                { id: 'b11-3', name: 'Plant Kingdom', isCompleted: false, xpReward: 120 },
+                { id: 'b11-4', name: 'Animal Kingdom', isCompleted: false, xpReward: 130 },
+                { id: 'b11-5', name: 'Morphology of Flowering Plants', isCompleted: false, xpReward: 120 },
+                { id: 'b11-6', name: 'Anatomy of Flowering Plants', isCompleted: false, xpReward: 130 },
+                { id: 'b11-7', name: 'Structural Organisation in Animals', isCompleted: false, xpReward: 110 },
+                { id: 'b11-8', name: 'Cell: The Unit of Life', isCompleted: false, xpReward: 140 },
+                { id: 'b11-9', name: 'Biomolecules', isCompleted: false, xpReward: 150 },
+                { id: 'b11-10', name: 'Cell Cycle and Cell Division', isCompleted: false, xpReward: 140 },
+                { id: 'b11-11', name: 'Transport in Plants', isCompleted: false, xpReward: 130 },
+                { id: 'b11-12', name: 'Mineral Nutrition', isCompleted: false, xpReward: 120 },
+                { id: 'b11-13', name: 'Photosynthesis in Higher Plants', isCompleted: false, xpReward: 150 },
+                { id: 'b11-14', name: 'Respiration in Plants', isCompleted: false, xpReward: 140 },
+                { id: 'b11-15', name: 'Plant Growth and Development', isCompleted: false, xpReward: 120 },
+                { id: 'b11-16', name: 'Digestion and Absorption', isCompleted: false, xpReward: 130 },
+                { id: 'b11-17', name: 'Breathing and Exchange of Gases', isCompleted: false, xpReward: 120 },
+                { id: 'b11-18', name: 'Body Fluids and Circulation', isCompleted: false, xpReward: 140 },
+                { id: 'b11-19', name: 'Excretory Products and their Elimination', isCompleted: false, xpReward: 130 },
+                { id: 'b11-20', name: 'Locomotion and Movement', isCompleted: false, xpReward: 120 },
+                { id: 'b11-21', name: 'Neural Control and Coordination', isCompleted: false, xpReward: 150 },
+                { id: 'b11-22', name: 'Chemical Coordination and Integration', isCompleted: false, xpReward: 140 },
+            ]
+        }
+    ],
+    "12": [
+        {
+            id: 'math',
+            name: 'Mathematics',
+            color: 'text-blue-500',
+            icon: 'Calculator',
+            chapters: [
+                { id: 'm12-1', name: 'Relations and Functions', isCompleted: false, xpReward: 120 },
+                { id: 'm12-2', name: 'Inverse Trigonometric Functions', isCompleted: false, xpReward: 110 },
+                { id: 'm12-3', name: 'Matrices', isCompleted: false, xpReward: 130 },
+                { id: 'm12-4', name: 'Determinants', isCompleted: false, xpReward: 130 },
+                { id: 'm12-5', name: 'Continuity and Differentiability', isCompleted: false, xpReward: 160 },
+                { id: 'm12-6', name: 'Application of Derivatives', isCompleted: false, xpReward: 150 },
+                { id: 'm12-7', name: 'Integrals', isCompleted: false, xpReward: 180 },
+                { id: 'm12-8', name: 'Application of Integrals', isCompleted: false, xpReward: 140 },
+                { id: 'm12-9', name: 'Differential Equations', isCompleted: false, xpReward: 150 },
+                { id: 'm12-10', name: 'Vector Algebra', isCompleted: false, xpReward: 130 },
+                { id: 'm12-11', name: 'Three Dimensional Geometry', isCompleted: false, xpReward: 140 },
+                { id: 'm12-12', name: 'Linear Programming', isCompleted: false, xpReward: 110 },
+                { id: 'm12-13', name: 'Probability', isCompleted: false, xpReward: 140 },
+            ]
+        },
+        {
+            id: 'physics',
+            name: 'Physics',
+            color: 'text-emerald-500',
+            icon: 'Atom',
+            chapters: [
+                { id: 'p12-1', name: 'Electric Charges and Fields', isCompleted: false, xpReward: 130 },
+                { id: 'p12-2', name: 'Electrostatic Potential and Capacitance', isCompleted: false, xpReward: 130 },
+                { id: 'p12-3', name: 'Current Electricity', isCompleted: false, xpReward: 140 },
+                { id: 'p12-4', name: 'Moving Charges and Magnetism', isCompleted: false, xpReward: 150 },
+                { id: 'p12-5', name: 'Magnetism and Matter', isCompleted: false, xpReward: 110 },
+                { id: 'p12-6', name: 'Electromagnetic Induction', isCompleted: false, xpReward: 130 },
+                { id: 'p12-7', name: 'Alternating Current', isCompleted: false, xpReward: 130 },
+                { id: 'p12-8', name: 'Electromagnetic Waves', isCompleted: false, xpReward: 110 },
+                { id: 'p12-9', name: 'Ray Optics and Optical Instruments', isCompleted: false, xpReward: 160 },
+                { id: 'p12-10', name: 'Wave Optics', isCompleted: false, xpReward: 140 },
+                { id: 'p12-11', name: 'Dual Nature of Radiation and Matter', isCompleted: false, xpReward: 120 },
+                { id: 'p12-12', name: 'Atoms', isCompleted: false, xpReward: 110 },
+                { id: 'p12-13', name: 'Nuclei', isCompleted: false, xpReward: 120 },
+                { id: 'p12-14', name: 'Semiconductor Electronics', isCompleted: false, xpReward: 150 },
+            ]
+        },
+        {
+            id: 'chemistry',
+            name: 'Chemistry',
+            color: 'text-teal-500',
+            icon: 'FlaskConical',
+            chapters: [
+                { id: 'c12-1', name: 'Solutions', isCompleted: false, xpReward: 120 },
+                { id: 'c12-2', name: 'Electrochemistry', isCompleted: false, xpReward: 140 },
+                { id: 'c12-3', name: 'Chemical Kinetics', isCompleted: false, xpReward: 130 },
+                { id: 'c12-4', name: 'd- and f-Block Elements', isCompleted: false, xpReward: 120 },
+                { id: 'c12-5', name: 'Coordination Compounds', isCompleted: false, xpReward: 130 },
+                { id: 'c12-6', name: 'Haloalkanes and Haloarenes', isCompleted: false, xpReward: 130 },
+                { id: 'c12-7', name: 'Alcohols, Phenols and Ethers', isCompleted: false, xpReward: 130 },
+                { id: 'c12-8', name: 'Aldehydes, Ketones and Carboxylic Acids', isCompleted: false, xpReward: 150 },
+                { id: 'c12-9', name: 'Amines', isCompleted: false, xpReward: 120 },
+                { id: 'c12-10', name: 'Biomolecules', isCompleted: false, xpReward: 110 },
+            ]
+        },
+        {
+            id: 'english',
+            name: 'English (Flamingo & Vistas)',
+            color: 'text-rose-500',
+            icon: 'BookOpen',
+            chapters: [
+                { id: 'e12-1', name: 'The Last Lesson', isCompleted: false, xpReward: 100 },
+                { id: 'e12-2', name: 'Lost Spring', isCompleted: false, xpReward: 110 },
+                { id: 'e12-3', name: 'Deep Water', isCompleted: false, xpReward: 110 },
+                { id: 'e12-4', name: 'The Rattrap', isCompleted: false, xpReward: 120 },
+                { id: 'e12-5', name: 'Indigo', isCompleted: false, xpReward: 110 },
+                { id: 'e12-6', name: 'Poets and Pancakes', isCompleted: false, xpReward: 100 },
+                { id: 'e12-7', name: 'My Mother at Sixty-six', isCompleted: false, xpReward: 100 },
+                { id: 'e12-8', name: 'Keeping Quiet', isCompleted: false, xpReward: 100 },
+                { id: 'e12-9', name: 'The Third Level', isCompleted: false, xpReward: 120 },
+                { id: 'e12-10', name: 'The Tiger King', isCompleted: false, xpReward: 110 },
+            ]
+        },
+        {
+            id: 'computer',
+            name: 'Computer Science (Python)',
+            color: 'text-cyan-500',
+            icon: 'Monitor',
+            chapters: [
+                { id: 'cs12-1', name: 'Computational Thinking and Programming - 2', isCompleted: false, xpReward: 150 },
+                { id: 'cs12-2', name: 'Computer Networks', isCompleted: false, xpReward: 130 },
+                { id: 'cs12-3', name: 'Database Management', isCompleted: false, xpReward: 140 },
+            ]
+        },
+        {
+            id: 'biology',
+            name: 'Biology',
+            color: 'text-green-600',
+            icon: 'Microscope',
+            chapters: [
+                { id: 'b12-1', name: 'Reproduction in Organisms', isCompleted: false, xpReward: 100 },
+                { id: 'b12-2', name: 'Sexual Reproduction in Flowering Plants', isCompleted: false, xpReward: 130 },
+                { id: 'b12-3', name: 'Human Reproduction', isCompleted: false, xpReward: 140 },
+                { id: 'b12-4', name: 'Reproductive Health', isCompleted: false, xpReward: 110 },
+                { id: 'b12-5', name: 'Principles of Inheritance and Variation', isCompleted: false, xpReward: 150 },
+                { id: 'b12-6', name: 'Molecular Basis of Inheritance', isCompleted: false, xpReward: 160 },
+                { id: 'b12-7', name: 'Evolution', isCompleted: false, xpReward: 140 },
+                { id: 'b12-8', name: 'Human Health and Disease', isCompleted: false, xpReward: 130 },
+                { id: 'b12-9', name: 'Strategies for Enhancement in Food Production', isCompleted: false, xpReward: 120 },
+                { id: 'b12-10', name: 'Microbes in Human Welfare', isCompleted: false, xpReward: 110 },
+                { id: 'b12-11', name: 'Biotechnology: Principles and Processes', isCompleted: false, xpReward: 150 },
+                { id: 'b12-12', name: 'Biotechnology and its Applications', isCompleted: false, xpReward: 140 },
+                { id: 'b12-13', name: 'Organisms and Populations', isCompleted: false, xpReward: 130 },
+                { id: 'b12-14', name: 'Ecosystem', isCompleted: false, xpReward: 120 },
+                { id: 'b12-15', name: 'Biodiversity and Conservation', isCompleted: false, xpReward: 130 },
+                { id: 'b12-16', name: 'Environmental Issues', isCompleted: false, xpReward: 120 },
             ]
         }
     ]

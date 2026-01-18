@@ -1,7 +1,7 @@
 import React from 'react';
 import { syllabusData } from '../data/syllabus';
 import { cn } from '../lib/utils';
-import { LayoutDashboard, BookOpen, Calculator, FlaskConical, Globe, Feather, Timer, LogOut, FileText, Settings } from 'lucide-react';
+import { LayoutDashboard, BookOpen, Calculator, FlaskConical, Globe, Feather, Timer, LogOut, FileText, Settings, Atom, Monitor } from 'lucide-react';
 
 interface SidebarProps {
     currentView: string;
@@ -16,7 +16,9 @@ const iconMap: Record<string, React.ElementType> = {
     FlaskConical,
     Globe,
     BookOpen,
-    Feather
+    Feather,
+    Atom,
+    Monitor
 };
 
 export function Sidebar({ currentView, setView, onLogout, onOpenSettings, grade }: SidebarProps) {

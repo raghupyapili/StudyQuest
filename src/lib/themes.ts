@@ -1,22 +1,24 @@
 export interface Rank {
     rank: string;
     description: string;
-    minProgress: number;
+    minProgress: number; // 0-100
     icon: string;
 }
 
 export interface SubjectStyle {
     subjectId: string;
-    name: string; // e.g. "Thunder Breathing", "Omnitrix Alien", etc.
-    character: string;
-    elements: string[]; // e.g. "First Form...", "Heatblast", etc.
+    name: string; // Theme-specific name (e.g. "Thunder Breathing")
+    character: string; // The mentor character
+    elements: string[]; // Progression logic (e.g. Form 1, Form 2)
 }
 
 export interface Theme {
-    grade: string;
+    id: string; // Added ID
+    grade: string; // Legacy support, or recommended grade
     title: string;
     subtitle: string;
     bgImage: string;
+    primaryColor: string; // HSL value for CSS variable
     accentColor: string;
     secondaryColor: string;
     ranks: Rank[];
@@ -25,12 +27,33 @@ export interface Theme {
     commandLabel: string;
 }
 
-export const THEMES: Record<string, Theme> = {
-    "10": {
+export type ThemeId = 'demon-slayer' | 'avengers' | 'ninja' | 'omnitrix' | 'dholakpur' | 'jee' | 'neet';
+
+export interface ThemeOption {
+    id: ThemeId;
+    name: string;
+    description: string;
+    targetGrades: string[];
+}
+
+export const AVAILABLE_THEMES: ThemeOption[] = [
+    { id: 'dholakpur', name: 'Dholakpur Heroes', description: 'Join Bheem and friends! (Best for Class 6)', targetGrades: ['6'] },
+    { id: 'omnitrix', name: 'Omnitrix Hero', description: 'It\'s Hero Time! (Best for Class 7)', targetGrades: ['7'] },
+    { id: 'ninja', name: 'Ninja Academy', description: 'Find your Nindo. (Best for Class 8)', targetGrades: ['8'] },
+    { id: 'avengers', name: 'Avengers Initiative', description: 'Assemble for the world. (Best for Class 9)', targetGrades: ['9'] },
+    { id: 'demon-slayer', name: 'Demon Slayer Corps', description: 'Master the Breathing Styles. (Best for Class 10)', targetGrades: ['10'] },
+    { id: 'jee', name: 'IIT-JEE Protocol', description: 'Serious Engineering Prep. (Class 11/12)', targetGrades: ['11', '12'] },
+    { id: 'neet', name: 'NEET Medical Cadre', description: 'Elite Medical Prep. (Class 11/12)', targetGrades: ['11', '12'] },
+];
+
+export const THEMES: Record<ThemeId, Theme> = {
+    'demon-slayer': {
+        id: 'demon-slayer',
         grade: "10",
         title: "Demon Slayer Corps",
         subtitle: "Wisteria Sector",
         bgImage: "/slayer-bg.png",
+        primaryColor: "262 83% 58%", // Purple (Wisteria) - Keep original brand color or switch to orange? Let's keep purple as it matches the logo.
         accentColor: "from-orange-600 to-red-600",
         secondaryColor: "text-orange-500",
         unitLabel: "Distance to Final Selection",
@@ -60,11 +83,13 @@ export const THEMES: Record<string, Theme> = {
             ai: { subjectId: 'ai', name: 'Wind Breathing', character: 'Sanemi', elements: ['Dust Whirlwind', 'Claws-Purifying Wind', 'Rising Dust Storm', 'Cold Mountain Wind'] },
         }
     },
-    "9": {
+    'avengers': {
+        id: 'avengers',
         grade: "9",
         title: "Avengers Initiative",
         subtitle: "S.H.I.E.L.D HQ",
         bgImage: "https://images.unsplash.com/photo-1635805737707-575885ab0820?auto=format&fit=crop&q=80",
+        primaryColor: "221 83% 53%", // Blue-600
         accentColor: "from-blue-600 to-indigo-600",
         secondaryColor: "text-blue-500",
         unitLabel: "Days to Assemble",
@@ -88,11 +113,13 @@ export const THEMES: Record<string, Theme> = {
             ai: { subjectId: 'ai', name: 'Mind Stone Processing', character: 'Vision', elements: ['Density Control', 'Solar Beam', 'Logic Synthesis'] },
         }
     },
-    "8": {
+    'ninja': {
+        id: 'ninja',
         grade: "8",
         title: "Konoha Ninja Academy",
         subtitle: "Leaf Village",
         bgImage: "https://images.unsplash.com/photo-1614850523296-e8c041de2394?auto=format&fit=crop&q=80",
+        primaryColor: "32 95% 44%", // Orange-600
         accentColor: "from-orange-500 to-yellow-500",
         secondaryColor: "text-orange-400",
         unitLabel: "Days to Chunin Exams",
@@ -116,11 +143,13 @@ export const THEMES: Record<string, Theme> = {
             ai: { subjectId: 'ai', name: 'Uchiha Genjutsu', character: 'Itachi', elements: ['Tsukuyomi', 'Amaterasu', 'Susanoo'] },
         }
     },
-    "7": {
+    'omnitrix': {
+        id: 'omnitrix',
         grade: "7",
         title: "Omnitrix Hero",
         subtitle: "Plumber Base",
         bgImage: "https://images.unsplash.com/photo-1550745165-9bc0b252726f?auto=format&fit=crop&q=80",
+        primaryColor: "142 76% 36%", // Green-600
         accentColor: "from-green-600 to-emerald-600",
         secondaryColor: "text-green-500",
         unitLabel: "Days to Alien Invasion",
@@ -143,11 +172,13 @@ export const THEMES: Record<string, Theme> = {
             ai: { subjectId: 'ai', name: 'Cerebro-Storm', character: 'Brainstorm', elements: ['IQ Pulse', 'Electric Blast', 'Think Tank'] },
         }
     },
-    "6": {
+    'dholakpur': {
+        id: 'dholakpur',
         grade: "6",
         title: "Dholakpur Heroes",
         subtitle: "King Indraverma's Kingdom",
         bgImage: "https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&q=80",
+        primaryColor: "45 93% 47%", // Yellow-500 equivalent
         accentColor: "from-yellow-400 to-orange-400",
         secondaryColor: "text-yellow-600",
         unitLabel: "Days to Kingdom Fair",
@@ -170,11 +201,91 @@ export const THEMES: Record<string, Theme> = {
             computer: { subjectId: 'computer', name: 'Dhoomketu Gadgets', character: 'Professor Dhoomketu', elements: ['Robot Helper', 'Space Rocket', 'Time Watch'] },
             ai: { subjectId: 'ai', name: 'Indumati Strategy', character: 'Indumati', elements: ['Royal Decree', 'Clever Plan', 'Kind Ruler'] },
         }
+    },
+    'jee': {
+        id: 'jee',
+        grade: "11",
+        title: "IIT-JEE Protocol",
+        subtitle: "Institute of Technology",
+        bgImage: "https://images.unsplash.com/photo-1517420704952-d9f39e95b43e?auto=format&fit=crop&q=80",
+        primaryColor: "217 91% 60%", // Blue-500
+        accentColor: "from-blue-700 to-sky-500",
+        secondaryColor: "text-blue-400",
+        unitLabel: "Days to JEE Mains",
+        commandLabel: "Exam Controller Updates",
+        ranks: [
+            { rank: 'Aspirant', description: 'The journey begins.', minProgress: 0, icon: '📝' },
+            { rank: 'Foundation Builder', description: 'Strengthening the core.', minProgress: 20, icon: '📚' },
+            { rank: 'Problem Solver', description: 'Aptitude rising.', minProgress: 40, icon: '🧩' },
+            { rank: 'Ranker', description: 'Top percentile insight.', minProgress: 60, icon: '📈' },
+            { rank: 'Topper', description: 'Elite performance.', minProgress: 80, icon: '🏆' },
+            { rank: 'AIR 1', description: 'Legendary Status.', minProgress: 98, icon: '🌟' },
+        ],
+        subjectStyles: {
+            math: { subjectId: 'math', name: 'Calculus Core', character: 'Ramanujan AI', elements: ['Algebra', 'Calculus', 'Vectors', 'Coordinate Geometry'] },
+            physics: { subjectId: 'physics', name: 'Mechanics Engine', character: 'Newton AI', elements: ['Kinematics', 'Dynamics', 'Electromagnetism', 'Optics'] },
+            chemistry: { subjectId: 'chemistry', name: 'Molecular Lab', character: 'Curie AI', elements: ['Physical', 'Organic', 'Inorganic', 'Stoichiometry'] },
+            english: { subjectId: 'english', name: 'Verbal Logic', character: 'Wren', elements: ['Comprehension', 'Grammar', 'Vocabulary'] },
+            computer: { subjectId: 'computer', name: 'Algorithmic Thinking', character: 'Turing', elements: ['Python', 'SQL', 'Networking'] },
+        }
+    },
+    'neet': {
+        id: 'neet',
+        grade: "11",
+        title: "NEET Medical Cadre",
+        subtitle: "Medical Council",
+        bgImage: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?auto=format&fit=crop&q=80",
+        primaryColor: "160 84% 39%", // Emerald-600
+        accentColor: "from-emerald-600 to-teal-500",
+        secondaryColor: "text-emerald-400",
+        unitLabel: "Days to NEET",
+        commandLabel: "Hospital Board Updates",
+        ranks: [
+            { rank: 'Intern', description: 'Learning the basics.', minProgress: 0, icon: '🩺' },
+            { rank: 'Resident', description: 'On duty.', minProgress: 20, icon: '🏥' },
+            { rank: 'Specialist', description: 'Deep knowledge.', minProgress: 40, icon: '🔬' },
+            { rank: 'Consultant', description: 'Expert diagnosis.', minProgress: 60, icon: '🥼' },
+            { rank: 'Surgeon', description: 'Precision master.', minProgress: 80, icon: '✂️' },
+            { rank: 'Director General', description: 'Head of Medicine.', minProgress: 98, icon: '⚕️' },
+        ],
+        subjectStyles: {
+            physics: { subjectId: 'physics', name: 'Bio-Physics', character: 'Curie', elements: ['Mechanics', 'Thermodynamics', 'Waves'] },
+            chemistry: { subjectId: 'chemistry', name: 'Bio-Chemistry', character: 'Pasteur', elements: ['Organic', 'Inorganic', 'Bonding'] },
+            biology: { subjectId: 'biology', name: 'Life Sciences', character: 'Darwin', elements: ['Botany', 'Zoology', 'Genetics', 'Ecology'] },
+            english: { subjectId: 'english', name: 'Medical Communication', character: 'Nightingale', elements: ['Reports', 'Directives', 'Ethics'] },
+            computer: { subjectId: 'computer', name: 'Health Informatics', character: 'System', elements: ['Data', 'Records', 'Analysis'] },
+            // Fallback for math if they have it? (Usually not, but let's be safe)
+            math: { subjectId: 'math', name: 'Biostatistics', character: 'Fischer', elements: ['Data', 'Probability'] },
+        }
     }
 };
 
+export const GRADE_THEME_MAP: Record<string, ThemeId> = {
+    '6': 'dholakpur',
+    '7': 'omnitrix',
+    '8': 'ninja',
+    '9': 'avengers',
+    '10': 'demon-slayer',
+    '11': 'jee',
+    '12': 'jee'
+};
+
+export function getTheme(id?: string): Theme {
+    if (!id) return THEMES['demon-slayer'];
+    // Check if id is a grade (legacy)
+    if (GRADE_THEME_MAP[id]) {
+        return THEMES[GRADE_THEME_MAP[id]];
+    }
+    // Check if id is a theme id
+    if (THEMES[id as ThemeId]) {
+        return THEMES[id as ThemeId];
+    }
+    return THEMES['demon-slayer'];
+}
+
 export function getGradeTheme(grade: string): Theme {
-    return THEMES[grade] || THEMES["10"];
+    // Backward compatibility wrapper
+    return getTheme(grade);
 }
 
 export function getRank(theme: Theme, progress: number): Rank {

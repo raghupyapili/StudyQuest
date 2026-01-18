@@ -127,7 +127,7 @@ export function SettingsModal({ user, children = [], onClose, onUpdateSettings, 
                                             onChange={(e) => setNewChild({ ...newChild, grade: e.target.value })}
                                             className="w-full bg-zinc-900 border-none rounded-xl p-3 text-sm text-white focus:ring-1 focus:ring-primary/50 outline-none"
                                         >
-                                            {['6', '7', '8', '9', '10'].map(g => <option key={g} value={g}>Class {g}</option>)}
+                                            {['6', '7', '8', '9', '10', '11', '12'].map(g => <option key={g} value={g}>Class {g}</option>)}
                                         </select>
                                     </div>
                                     <div className="space-y-1.5">

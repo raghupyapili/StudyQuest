@@ -3,7 +3,7 @@ import { type Subject } from '../data/syllabus';
 import { Flame, Target, Star, Sword, Zap, Shield, Sparkles, Calendar, TrendingUp, Award } from 'lucide-react';
 import { differenceInDays, format } from 'date-fns';
 import { cn } from '../lib/utils';
-import { getGradeTheme, getRank, getUnlockedElement } from '../lib/themes';
+import { getTheme, getRank, getUnlockedElement } from '../lib/themes';
 import type { User, GameState } from '../types';
 
 interface DashboardProps {
@@ -18,7 +18,7 @@ const WACKY_TITLES = ['Super', 'Elite', 'Legendary', 'Master', 'Sparkling', 'Cos
 
 export function Dashboard({ state, user, currentSyllabus, onSelectChapter, onUpdateSettings }: DashboardProps) {
     const currentGrade = state.settings.grade || '10';
-    const theme = getGradeTheme(currentGrade);
+    const theme = getTheme(user?.visualThemeId || currentGrade);
 
     const diff = differenceInDays(new Date(state.settings.examDate), new Date());
     const daysUntilExam = diff < 0 ? 0 : diff;

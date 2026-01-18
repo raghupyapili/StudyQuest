@@ -12,7 +12,7 @@ import { useGameState } from './hooks/useGameState';
 import { useAuth } from './hooks/useAuth';
 import { SettingsModal } from './components/SettingsModal';
 import { syllabusData } from './data/syllabus';
-import { getGradeTheme } from './lib/themes';
+import { getTheme } from './lib/themes';
 import type { Chapter, Subject } from './data/syllabus';
 import { differenceInDays, isAfter } from 'date-fns';
 import { cn } from './lib/utils';
@@ -55,6 +55,8 @@ function App() {
       document.documentElement.classList.remove('light');
     }
   }, [user?.themePreference]);
+
+
 
   const currentGrade = state.settings.grade || '10';
   const baseSyllabus = (syllabusData[currentGrade] || syllabusData['10']).filter(sub => {
@@ -104,7 +106,14 @@ function App() {
     }
   }, [user?.id]);
 
-  const theme = getGradeTheme(currentGrade);
+  const theme = getTheme(targetUser?.visualThemeId || currentGrade);
+
+  // Apply visual theme colors
+  useEffect(() => {
+    if (theme.primaryColor) {
+      document.documentElement.style.setProperty('--primary', theme.primaryColor);
+    }
+  }, [theme.primaryColor]);
 
   const handleToggleChapter = (id: string, reward: number) => {
     if (user?.role === 'parent') return; // Read-only for parents
@@ -308,11 +317,7 @@ function App() {
 
             {/* Animated Glow */}
             <div className={cn(
-              "absolute -top-24 -left-24 w-64 h-64 blur-[100px] opacity-20 bg-primary rounded-full",
-              currentGrade === '6' && "bg-yellow-500",
-              currentGrade === '7' && "bg-green-500",
-              currentGrade === '8' && "bg-orange-500",
-              currentGrade === '9' && "bg-blue-500"
+              "absolute -top-24 -left-24 w-64 h-64 blur-[100px] opacity-20 bg-primary rounded-full"
             )}></div>
 
             <div className="absolute top-8 left-10 flex flex-col gap-1">
